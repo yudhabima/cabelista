@@ -1,0 +1,71 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+
+class CableController extends Controller
+{
+    /**
+     * Urutan standar untuk validasi (T568A & T568B)
+     */
+    private array $T568A = [
+        'white-green', 'green', 'white-orange', 'blue', 'white-blue', 'orange', 'white-brown', 'brown'
+    ];
+
+    private array $T568B = [
+        'white-orange', 'orange', 'white-green', 'blue', 'white-blue', 'green', 'white-brown', 'brown'
+    ];
+
+    public function index(Request $request)
+    {
+        // default urutan awal (acak), bisa juga ambil dari session
+        $wires = $this->T568B; // jadikan T568B sebagai basis
+        shuffle($wires);
+
+        return view('cable.index', [
+            'wires' => $wires,
+        ]);
+    }
+
+    public function shuffle(Request $request)
+    {
+        $wires = $this->T568B;
+        shuffle($wires);
+        return response()->json(['wires' => $wires]);
+    }
+
+    public function check(Request $request)
+    {
+        $request->validate([
+            'wires' => 'required|array|size:8',
+            'wires.*' => 'string'
+        ]);
+
+        $wires = $request->input('wires');
+
+        $isA = $wires === $this->T568A;
+        $isB = $wires === $this->T568B;
+
+        if ($isA || $isB) {
+            return response()->json([
+                'ok' => true,
+                'scheme' => $isA ? 'T568A' : 'T568B'
+            ]);
+        }
+
+        // Hitung berapa yang sudah benar pada posisi yang tepat (scoring sederhana)
+        $scoreA = 0; $scoreB = 0;
+        foreach ($wires as $i => $w) {
+            if ($w === $this->T568A[$i]) $scoreA++;
+            if ($w === $this->T568B[$i]) $scoreB++;
+        }
+
+        return response()->json([
+            'ok' => false,
+            'hint' => $scoreA >= $scoreB ? 'Lebih dekat ke T568A' : 'Lebih dekat ke T568B',
+            'matchA' => $scoreA,
+            'matchB' => $scoreB,
+        ]);
+    }
+}
