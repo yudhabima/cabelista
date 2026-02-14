@@ -96,7 +96,7 @@
                         Kelola materi pembelajaran instalasi kabel UTP
                     </p>
                     <button class="btn-gradient w-32 py-2 rounded-full font-semibold shadow-lg border-2 border-white/30 hover:shadow-xl hover:brightness-110 transition">
-                        <a href="{{ url('/tambahmateri') }}">Detail</a>
+                        <a href="{{ url('/course/edit) }}">Detail</a>
                     </button>
                 </div>
 
@@ -121,9 +121,9 @@
                     <p class="text-sm text-blue-100 mb-8 flex-1">
                         Memantau nilai dan hasil evaluasi simulasi crimping kabel UTP
                     </p>
-                    <button class="btn-gradient w-32 py-2 rounded-full font-semibold shadow-lg border-2 border-white/30 hover:shadow-xl hover:brightness-110 transition">
-                        <a href="{{ url('/analisisnilai') }}">Detail</a>
-                    </button>
+                    <a href="{{ url('/analisisnilai') }}" class="btn-gradient w-32 py-2 rounded-full font-semibold shadow-lg border-2 border-white/30 hover:shadow-xl hover:brightness-110 transition inline-block text-center">
+                    Detail
+                    </a>
                 </div>
 
             </div>

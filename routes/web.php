@@ -3,7 +3,13 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CableController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CourseController;
 use App\Http\Controllers\AdminController;
+
+
+Route::get('/course/edit', [CourseController::class, 'edit'])->name('course.edit');
+Route::post('/course/update', [CourseController::class, 'update'])->name('course.update');
+Route::get('/course/preview', [CourseController::class, 'preview'])->name('course.preview');
 
 Route::get('/login', [AuthController::class, 'login'])->name('login');
 Route::post('/login', [AuthController::class, 'authenticate'])->name('login.authenticate');
@@ -39,6 +45,10 @@ Route::get('/analisisnilai', function () {
 
 Route::get('/tambahmateri', function () {
     return view('admin.tambahmateri');
+});
+
+Route::get('/admin/materi/materiadmin', function () {
+    return view('admin.materi.materiadmin');
 });
 
 Route::post('/check', [CableController::class, 'check'])->name('cable.check');
