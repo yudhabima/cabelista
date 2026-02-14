@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CableController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CourseController;
+use App\Http\Controllers\MateriController;
 use App\Http\Controllers\AdminController;
 
 
@@ -50,6 +51,10 @@ Route::get('/tambahmateri', function () {
 Route::get('/admin/materi/materiadmin', function () {
     return view('admin.materi.materiadmin');
 });
+
+Route::get('/admin/materi', 
+    [MateriController::class, 'index']
+)->name('materi.index')->middleware('auth');
 
 Route::post('/check', [CableController::class, 'check'])->name('cable.check');
 Route::post('/shuffle', [CableController::class, 'shuffle'])->name('cable.shuffle');

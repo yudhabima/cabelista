@@ -61,7 +61,7 @@
                     <i class="fa-solid fa-gauge-high w-6"></i>
                     <span>Dashboard</span>
                 </a>
-                <a href="#" class="flex items-center space-x-3 px-4 py-3 text-white/80 hover:bg-white/10 rounded-lg transition hover:text-white">
+                <a href="{{ url('/tambahmateri') }}" class="flex items-center space-x-3 px-4 py-3 text-white/80 hover:bg-white/10 rounded-lg transition hover:text-white">
                     <i class="fa-solid fa-clipboard-list w-6"></i>
                     <span>Kelola Materi</span>
                 </a>
@@ -96,7 +96,7 @@
                         Kelola materi pembelajaran instalasi kabel UTP
                     </p>
                     <button class="btn-gradient w-32 py-2 rounded-full font-semibold shadow-lg border-2 border-white/30 hover:shadow-xl hover:brightness-110 transition">
-                        <a href="{{ url('/course/edit) }}">Detail</a>
+                        <a href="{{ url('/course/edit') }}" class="text-white">Detail</a>
                     </button>
                 </div>
 
@@ -109,7 +109,7 @@
                         Kelola video tutorial penggunaan Cabelista
                     </p>
                     <button class="btn-gradient w-32 py-2 rounded-full font-semibold shadow-lg border-2 border-white/30 hover:shadow-xl hover:brightness-110 transition">
-                        Detail
+                        <a href="{{ url('/tambahmateri') }}" class="text-white">Detail</a>
                     </button>
                 </div>
 
