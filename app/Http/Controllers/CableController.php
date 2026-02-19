@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Video;
+use App\Models\Material;
+
 
 class CableController extends Controller
 {
@@ -19,15 +22,30 @@ class CableController extends Controller
 
     public function index(Request $request)
     {
-        // default urutan awal (acak), bisa juga ambil dari session
-        $wires = $this->T568B; // jadikan T568B sebagai basis
+        // --- LOGIKA GAME KABEL (YANG LAMA) ---
+        // default urutan awal (acak)
+        $wires = $this->T568B; 
         shuffle($wires);
 
-        return view('cable.index', [
-            'wires' => $wires,
-        ]);
-    }
+        // --- LOGIKA VIDEO (YANG BARU) ---
+        // 2. Ambil data video dari database
+        $videoData = Video::first();
 
+        // 3. Cek apakah ada data video custom? Jika tidak, pakai default.
+        $videoUrl = $videoData ? $videoData->url : 'https://www.youtube.com/embed/5FBGJARktZQ';
+
+        // 4. Kirim kedua data (wires & videoUrl) ke view
+        // Pastikan nama view-nya sesuai dengan file landing page kamu (misal: 'welcome' atau 'cable.index')
+        $materials = Material::latest()->get();
+
+    return view('cable.index', compact('materials') + [
+
+    'wires' => $wires,
+    'videoUrl' => $videoUrl,
+    'material' => Material::with('steps')->first()
+
+]);
+    }
     public function shuffle(Request $request)
     {
         $wires = $this->T568B;

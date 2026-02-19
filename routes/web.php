@@ -6,6 +6,8 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\MateriController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\VideoController;
+use App\Http\Controllers\LearningController;
 
 
 Route::get('/course/edit', [CourseController::class, 'edit'])->name('course.edit');
@@ -22,6 +24,12 @@ return view('admin.dashboard');
 Route::get('/admin/dashboard', function () {
     return view('admin.dashboard');
 })->middleware('auth')->name('admin.dashboard');
+
+Route::get('/video', [VideoController::class, 'index'])->name('admin.video.index');
+Route::put('/video/update', [VideoController::class, 'update'])->name('admin.video.update');
+
+Route::get('/learning/{id}/step/{step?}', [LearningController::class, 'show'])->name('learning.show');
+Route::post('/learning/{id}/next/{currentStep}', [LearningController::class, 'next'])->name('learning.next');
 
 Route::post('/logout', [AuthController::class, 'logout'])
 ->middleware('auth')
@@ -52,9 +60,25 @@ Route::get('/admin/materi/materiadmin', function () {
     return view('admin.materi.materiadmin');
 });
 
-Route::get('/admin/materi', 
+Route::get('/admin/materi/index', 
     [MateriController::class, 'index']
 )->name('materi.index')->middleware('auth');
+
+Route::post('/materi/store',
+    [MateriController::class,'store'])
+    ->name('materi.store');
+
+Route::post('/materi/{id}/complete-step',
+    [MateriController::class,'completeStep'])
+    ->name('materi.completeStep');
+
+Route::resource('materi', MateriController::class);
+
+Route::get('/materi/{id}/edit', [MateriController::class, 'edit'])
+    ->name('materi.edit');
+
+Route::put('/materi/{id}', [MateriController::class, 'update'])
+    ->name('materi.update');
 
 Route::post('/check', [CableController::class, 'check'])->name('cable.check');
 Route::post('/shuffle', [CableController::class, 'shuffle'])->name('cable.shuffle');

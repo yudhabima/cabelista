@@ -21,7 +21,13 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'total_xp',
     ];
+
+    public function materialProgress()
+    {
+    return $this->hasMany(MaterialProgress::class);
+    }
 
     /**
      * The attributes that should be hidden for serialization.

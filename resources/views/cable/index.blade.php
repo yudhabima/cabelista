@@ -449,27 +449,40 @@
         <h2>Video Tutorial</h2>
         <p>Pelajari Cabelista dengan video tutorial kami</p>
         <div class="video-container">
-    <iframe 
-        src="https://www.youtube.com/embed/5FBGJARktZQ"
+        <iframe 
+        src="{{ $videoUrl ?? 'https://www.youtube.com/embed/5FBGJARktZQ' }}"
         title="Video Tutorial Crimping Kabel UTP"
         allowfullscreen>
-    </iframe>
-</div>
+        </iframe>
+        </div>
     </section>
 
     <!-- Materials Section -->
     <section class="materials-section" id="materi">
         <h2>Materi</h2>
         <p>Rasakan serunya belajar di Cabelista</p>
-        
-        <div class="materials-grid">
-            <div class="material-card">
-                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3E%3Cg%3E%3Crect x='20' y='30' width='30' height='40' fill='%2366BB6A'/%3E%3Crect x='20' y='50' width='30' height='40' fill='%23EF5350'/%3E%3Crect x='20' y='70' width='30' height='40' fill='%232196F3'/%3E%3C/g%3E%3C/svg%3E" alt="Books">
-                <h3>Pengenalan Kabel UTP</h3>
-                <p>Memahami jenis-jenis kabel UTP dan fungsinya dalam jaringan komputer</p>
-                <a href="{{ url('/materi1') }}" class="btn-secondary">Pilih </a>
-            </div>
 
+    @if(isset($materials))
+    @endif
+        
+    <div class="materials-grid">
+    @forelse($materials as $material)
+        <div class="material-card">
+        <img src="{{ $material->image
+            ? asset('storage/'.$material->image)
+            : 'data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 120 120%27%3E%3Cg%3E%3Crect x=%2720%27 y=%2730%27 width=%2730%27 height=%2740%27 fill=%27%2366BB6A%27/%3E%3Crect x=%2720%27 y=%2750%27 width=%2730%27 height=%2740%27 fill=%27%23EF5350%27/%3E%3Crect x=%2720%27 y=%2770%27 width=%2730%27 height=%2740%27 fill=%27%232196F3%27/%3E%3C/g%3E%3C/svg%3E'
+            }}" alt="Material">
+        <h3>{{ $material->title }}</h3>
+        <p>{{ $material->description }}</p>
+        <a href="{{ route('materi.show', $material->id)}}"
+             class="btn-secondary">
+            Pilih
+        </a>
+    </div>
+    @empty
+        <p style="color:white">Belum ada materi</p>
+    @endforelse
+    
             <div class="material-card">
                 <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3E%3Cg%3E%3Crect x='20' y='30' width='30' height='40' fill='%2366BB6A'/%3E%3Crect x='20' y='50' width='30' height='40' fill='%23EF5350'/%3E%3Crect x='20' y='70' width='30' height='40' fill='%232196F3'/%3E%3C/g%3E%3C/svg%3E" alt="Books">
                 <h3>Susunan Warna Kabel</h3>
@@ -483,17 +496,10 @@
                 <p>Langkah-langkah praktis menggunakan tang crimping</p>
                 <a href="{{ url('/materi3') }}" class="btn-secondary">Pilih</a>
             </div>
-
-            <div class="material-card">
-                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3E%3Cg%3E%3Crect x='20' y='30' width='30' height='40' fill='%2366BB6A'/%3E%3Crect x='20' y='50' width='30' height='40' fill='%23EF5350'/%3E%3Crect x='20' y='70' width='30' height='40' fill='%232196F3'/%3E%3C/g%3E%3C/svg%3E" alt="Books">
-                <h3>Teknik Crimping</h3>
-                <p>Langkah-langkah praktis menggunakan tang crimping</p>
-                <button class="btn-secondary">Pilih</button>
-            </div>
         </div>
+    </div>
 
-        <a 
-   <a href="https://drive.google.com/file/d/1MTXaLHeEaB4pcz1FKWBhCffKkGG-19LK/view?usp=sharing"
+    <a href="https://drive.google.com/file/d/1MTXaLHeEaB4pcz1FKWBhCffKkGG-19LK/view?usp=sharing"
    class="btn-module"
    target="_blank"
    rel="noopener noreferrer">

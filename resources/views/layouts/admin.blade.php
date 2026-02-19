@@ -1,211 +1,76 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'Admin Panel')</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/magnific-popup.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <title>Dashboard Admin - Cabelista</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
     <style>
-        /* Adjust body to ensure content does not overlap with navbar and prevent horizontal scroll */
-        body {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-            overflow-x: hidden; /* Prevent horizontal scrolling */
+        body { font-family: 'Poppins', sans-serif; }
+        .bg-cabelista-blue { background-color: #004aad; }
+        .text-cabelista-blue { color: #004aad; }
+        .bg-card-blue { background-color: #004aad; }
+        
+        .btn-gradient {
+            background: linear-gradient(90deg, #d946ef 0%, #3b82f6 100%);
         }
-
-        /* Sidebar adjustments */
-        .sidebar {
-            height: 100vh;
-            position: fixed;
-            top: 80px; /* Push sidebar below navbar */
-            left: 0;
-            width: 250px;
-            background-color: #343a40;
-            color: white;
-            padding-top: 20px;
-        }
-
-        .main-content {
-            margin-left: 250px; /* Push content to the right to prevent overlap with sidebar */
-            padding: 20px;
-            min-height: 100vh; /* Ensure content fills the available height */
-        }
-
-        /* Logo and Admin Panel text in navbar */
-        .navbar .navbar-brand {
-            display: flex;
-            align-items: center;
-        }
-
-        .navbar .navbar-brand img {
-            height: 40px;
-            width: 40px;
-            margin-right: 10px;
-        }
-
-        .navbar .navbar-brand h4 {
-            margin: 0;
-            font-size: 1.25rem;
-            color: #343a40;
-            font-weight: bold;
-        }
-
-        /* Adjust navbar to fill the entire width */
-        .navbar {
-            width: 100%;
-            padding-left: 25px; /* Add 50px padding on the left */
-            padding-right: 25px; /* Add 50px padding on the right */
-            z-index: 10; /* Ensure the navbar is above the sidebar */
-        }
-
-        /* Ensure the main content occupies the full width of the page */
-        .container-fluid {
-            max-width: 100%;
-            padding-left: 0;
-            padding-right: 0;
+        .logo img {
+            height: 45px;
+            width: auto;
+            display: block;
         }
     </style>
 </head>
+<body class="bg-gray-50 min-h-screen flex flex-col overflow-hidden">
 
-<body>
-    <!-- Navbar with Logo and Admin Panel -->
-    <nav class="navbar navbar-expand-lg py-3 fixed-top bg-light shadow">
-        <a class="navbar-brand" href="#">
-            <img src="{{ asset('assest/icons/cabelista1.png') }}" alt="Logo">
-            <h4>SMCC Admin Panel</h4>
-        </a>
-
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <!-- Add additional navbar items here if needed -->
-            </ul>
-
-            <div class="d-flex">
-                @auth
-                    <!-- Navbar for authenticated users -->
-                    <a href="/" class="btn btn-primary me-2">Home</a>
-                    <form action="/logout" method="POST">
-                        @csrf
-                        <button type="submit" class="btn btn-dark">Logout</button>
-                    </form>
-                
-                @endauth
+    <header class="bg-cabelista-blue text-white p-4 flex justify-between items-center shadow-md z-20 relative shrink-0">
+        <div class="flex items-center space-x-2 pl-4">
+            <div class="logo">
+                 <img src="/assets/img/logo-cabelista.png" alt="Logo Cabelista">
             </div>
         </div>
-    </nav>
 
-    <div class="row" style="margin-top: 80px;">
-        <!-- Sidebar -->
-        <div class="sidebar">
-            <ul class="nav flex-column px-3">
-                <li class="nav-item">
-                    <a href="{{ route('dashboard') }}" class="nav-link text-white">
-                        <i class="fas fa-tachometer-alt me-2"></i> Dashboard
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{{ route('blog') }}" class="nav-link text-white">
-                        <i class="fas fa-newspaper me-2"></i> Kelola Blog Artikel
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{{ route('photo') }}" class="nav-link text-white">
-                        <i class="fas fa-camera-retro me-2"></i> Kelola Foto
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{{ route('tentang') }}" class="nav-link text-white">
-                        <i class="fas fa-users me-2"></i> Kelola Profil
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{{ route('add_video') }}" class="nav-link text-white">
-                        <i class="fas fa-video me-2"></i> Kelola Video
-                    </a>
-                </li>
-            </ul>
+        <div class="flex space-x-4 pr-4">
+            <a href="{{ url('/') }}" class="px-6 py-2 rounded-lg font-medium bg-blue-500 hover:bg-blue-600 transition shadow-lg border border-blue-400 text-white flex items-center">
+                Beranda
+            </a>
+            <form method="POST" action="{{ route('logout') }}">
+                @csrf
+                <button type="submit" class="px-6 py-2 rounded-lg font-medium bg-red-500 hover:bg-red-600 transition shadow-lg border border-red-400 text-white">
+                    Logout
+                </button>
+            </form>
         </div>
+    </header>
 
-        <!-- Main Content -->
-        <div class="main-content col">
+    <div class="flex flex-1 h-full overflow-hidden">
+        <aside class="w-64 bg-cabelista-blue text-white hidden md:block pt-8 shrink-0 overflow-y-auto">
+            <nav class="space-y-2 px-4">
+                <a href="{{ route('admin.dashboard') }}" class="flex items-center space-x-3 px-4 py-3 text-white/80 hover:bg-white/10 rounded-lg transition hover:text-white">
+                    <i class="fa-solid fa-gauge-high w-6"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="{{ route('materi.index') }}" class="flex items-center space-x-3 px-4 py-3 text-white/80 hover:bg-white/10 rounded-lg transition hover:text-white">
+                    <i class="fa-solid fa-clipboard-list w-6"></i>
+                    <span>Kelola Materi</span>
+                </a>
+                <a href="{{ route('admin.video.index') }}" class="flex items-center space-x-3 px-4 py-3 text-white/80 hover:bg-white/10 rounded-lg transition hover:text-white">
+                    <i class="fa-regular fa-circle-play w-6"></i>
+                    <span>Kelola Video</span>
+                </a>
+                <a href="{{ url('/analisisnilai') }}" class="flex items-center space-x-3 px-4 py-3 text-white/80 hover:bg-white/10 rounded-lg transition hover:text-white">
+                    <i class="fa-solid fa-book-open w-6"></i>
+                    <span>Analisis dan Nilai</span>
+                </a>
+            </nav>
+        </aside>
+
+        <main class="flex-1 flex flex-col relative overflow-y-auto bg-white w-full">
             @yield('content')
-        </div>
+        </main>
     </div>
-
-    <!-- Scripts -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/jquery.magnific-popup.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
-
-    <script>
-        $(document).ready(function() {
-            // Initialize Magnific Popup for image links
-            $('.image-link').magnificPopup({ type: 'image' });
-
-            // Initialize Summernote editors
-            $('#summernote').summernote({
-                height: 200,
-                toolbar: [
-                    ['style', ['style']],
-                    ['font', ['bold', 'italic', 'underline', 'clear']],
-                    ['para', ['ul', 'ol', 'paragraph']],
-                    ['insert', ['link', 'picture', 'video']],
-                    ['view', ['fullscreen', 'codeview', 'help']],
-                ],
-                callbacks: {
-                    onImageUpload: function(files) {
-                        // Close modal when image is uploaded
-                        $('.modal-backdrop').remove();
-                    }
-                }
-            });
-
-            $('#vision').summernote({
-                height: 200,
-                toolbar: [
-                    ['style', ['style']],
-                    ['font', ['bold', 'italic', 'underline', 'clear']],
-                    ['para', ['ul', 'ol', 'paragraph']],
-                    ['insert', ['link', 'picture', 'video']],
-                    ['view', ['fullscreen', 'codeview', 'help']],
-                ],
-                callbacks: {
-                    onImageUpload: function(files) {
-                        // Close modal when image is uploaded
-                        $('.modal-backdrop').remove();
-                    }
-                }
-            });
-
-            $('#mission').summernote({
-                height: 200,
-                toolbar: [
-                    ['style', ['style']],
-                    ['font', ['bold', 'italic', 'underline', 'clear']],
-                    ['para', ['ul', 'ol', 'paragraph']],
-                    ['insert', ['link', 'picture', 'video']],
-                    ['view', ['fullscreen', 'codeview', 'help']],
-                ],
-                callbacks: {
-                    onImageUpload: function(files) {
-                        // Close modal when image is uploaded
-                        $('.modal-backdrop').remove();
-                    }
-                }
-            });
-        });
-    </script>
 </body>
-
 </html>
