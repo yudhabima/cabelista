@@ -3,16 +3,11 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CableController;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\CourseController;
 use App\Http\Controllers\MateriController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\VideoController;
-use App\Http\Controllers\LearningController;
 
 
-Route::get('/course/edit', [CourseController::class, 'edit'])->name('course.edit');
-Route::post('/course/update', [CourseController::class, 'update'])->name('course.update');
-Route::get('/course/preview', [CourseController::class, 'preview'])->name('course.preview');
 
 Route::get('/login', [AuthController::class, 'login'])->name('login');
 Route::post('/login', [AuthController::class, 'authenticate'])->name('login.authenticate');
@@ -27,9 +22,6 @@ Route::get('/admin/dashboard', function () {
 
 Route::get('/video', [VideoController::class, 'index'])->name('admin.video.index');
 Route::put('/video/update', [VideoController::class, 'update'])->name('admin.video.update');
-
-Route::get('/learning/{id}/step/{step?}', [LearningController::class, 'show'])->name('learning.show');
-Route::post('/learning/{id}/next/{currentStep}', [LearningController::class, 'next'])->name('learning.next');
 
 Route::post('/logout', [AuthController::class, 'logout'])
 ->middleware('auth')
