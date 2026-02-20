@@ -206,7 +206,6 @@
         // ============================================
         // CONFIG & DATA
         // ============================================
-        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyywbQd0F6pfyuVfKS5BlR0cupcoTCVSYBwhy1WNYCYf8I_3tORNiLMjPOzpHyNVveddA/exec";
         
         const STANDARDS = {
             'T568A': ['w-wg', 'w-g', 'w-wo', 'w-b', 'w-wb', 'w-o', 'w-wbr', 'w-br'],
@@ -571,60 +570,82 @@
         }
 
         function finishExam() {
-            clearInterval(timerInt);
-            closeTester();
-            
-            let score = 100;
-            if(s.finalResult === 'FAIL' || !s.finalResult) score = 0;
-            else {
-                score -= Math.floor(s.cableUsed / 5) * 2;
-                if(s.rjCount > 1) score -= (s.rjCount - 1) * 5;
-                if(s.elapsedTime > 180) score -= Math.floor((s.elapsedTime - 180)/10);
-            }
-            if(score < 0) score = 0;
+    clearInterval(timerInt);
+    closeTester();
 
-            document.getElementById('scoreModal').classList.remove('hidden');
-            document.getElementById('finalScore').innerText = score;
-            document.getElementById('resStd').innerText = s.finalResult || "FAIL";
-            document.getElementById('resTime').innerText = document.getElementById('timer').innerText;
-            document.getElementById("resName").innerText = s.name;
-            document.getElementById("resAbsen").innerText = s.absen;
-            document.getElementById("resCable").innerText = s.cableUsed;
-            document.getElementById("resRJ45").innerText = s.rjCount;
-            
-           // Hapus session setelah selesai agar siswa bisa main baru kalau refresh 
-           localStorage.removeItem('cabelista_session');
-            
-            sendToGoogleSheets(score);
-        }
+    let score = 100;
 
-       function sendToGoogleSheets(score) {
+    if(!s.finalResult){
+    alert("Jalankan TESTER terlebih dahulu!");
+    return;
+}
+else {
+        score -= Math.floor(s.cableUsed / 5) * 2;
+        if(s.rjCount > 1) score -= (s.rjCount - 1) * 5;
+        if(s.elapsedTime > 180) score -= Math.floor((s.elapsedTime - 180)/10);
+    }
 
-    const payload = {
+    if(score < 0) score = 0;
+
+    document.getElementById('scoreModal').classList.remove('hidden');
+    document.getElementById('finalScore').innerText = score;
+    document.getElementById('resStd').innerText = s.finalResult || "FAIL";
+    document.getElementById('resTime').innerText = document.getElementById('timer').innerText;
+    document.getElementById("resName").innerText = s.name;
+    document.getElementById("resAbsen").innerText = s.absen;
+    document.getElementById("resCable").innerText = s.cableUsed;
+    document.getElementById("resRJ45").innerText = s.rjCount;
+
+    document.getElementById("resUploadStatus").innerHTML = "⏳ Menyimpan ke database...";
+
+    // Isi Form
+    document.getElementById("form_name").value = s.name;
+    document.getElementById("form_absen").value = s.absen;
+    document.getElementById("form_score").value = score;
+    document.getElementById("form_time").value = document.getElementById('timer').innerText;
+    document.getElementById("form_cable").value = s.cableUsed;
+    document.getElementById("form_rj45").value = s.rjCount;
+
+    // Tentukan status A/B
+    document.getElementById("form_t568a").value = s.finalResult === 'T568A' ? 1 : 0;
+    document.getElementById("form_t568b").value = s.finalResult === 'T568B' ? 1 : 0;
+
+    // Hapus session
+localStorage.removeItem('cabelista_session');
+
+// Kirim data pakai fetch (AJAX)
+fetch("{{ route('simulation.save') }}", {
+    method: "POST",
+    headers: {
+        "Content-Type": "application/json",
+        "X-CSRF-TOKEN": "{{ csrf_token() }}"
+    },
+    body: JSON.stringify({
         name: s.name,
         absen: s.absen,
-        skor: score,
-        status: s.finalResult.correct ? "Benar" : "Salah",
-        waktu: document.getElementById('timer').innerText,
-        kabel: s.cableUsed,
-        rj45: s.rjCount
-    };
-
-    const statusEl = document.getElementById("resUploadStatus");
-    statusEl.innerHTML = "⏳ Uploading...";
-
-    fetch(GOOGLE_SCRIPT_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
+        score: score,
+        status_t568a: s.finalResult === 'T568A' ? 1 : 0,
+        status_t568b: s.finalResult === 'T568B' ? 1 : 0,
+        time_used: document.getElementById('timer').innerText,
+        cable_used: s.cableUsed,
+        rj45_used: s.rjCount
     })
-    .then(res => res.text())
-    .then(() => {
-        statusEl.innerHTML = "✅ Berhasil";
-    })
-    .catch(() => {
-        statusEl.innerHTML = "❌ Gagal";
-    });
+})
+.then(response => response.json())
+.then(data => {
+    if(data.status === 'success') {
+        document.getElementById("resUploadStatus").innerHTML =
+            "✅ Berhasil disimpan";
+    } else {
+        document.getElementById("resUploadStatus").innerHTML =
+            "❌ Gagal menyimpan";
+    }
+})
+.catch(error => {
+    document.getElementById("resUploadStatus").innerHTML =
+        "❌ Gagal koneksi server";
+});
+
 }
 
 
@@ -633,5 +654,18 @@
             window.open(`https://wa.me/?text=${txt}`, '_blank');
         }
     </script>
+
+    <form id="resultForm" action="{{ route('simulation.save') }}" method="POST">
+    @csrf
+    <input type="hidden" name="name" id="form_name">
+    <input type="hidden" name="absen" id="form_absen">
+    <input type="hidden" name="score" id="form_score">
+    <input type="hidden" name="status_t568a" id="form_t568a">
+    <input type="hidden" name="status_t568b" id="form_t568b">
+    <input type="hidden" name="time_used" id="form_time">
+    <input type="hidden" name="cable_used" id="form_cable">
+    <input type="hidden" name="rj45_used" id="form_rj45">
+</form>
+
 </body>
 </html>

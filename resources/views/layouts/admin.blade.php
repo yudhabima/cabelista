@@ -61,7 +61,7 @@
                     <i class="fa-regular fa-circle-play w-6"></i>
                     <span>Kelola Video</span>
                 </a>
-                <a href="{{ url('/analisisnilai') }}" class="flex items-center space-x-3 px-4 py-3 text-white/80 hover:bg-white/10 rounded-lg transition hover:text-white">
+                <a href="{{ url('/analisis') }}" class="flex items-center space-x-3 px-4 py-3 text-white/80 hover:bg-white/10 rounded-lg transition hover:text-white">
                     <i class="fa-solid fa-book-open w-6"></i>
                     <span>Analisis dan Nilai</span>
                 </a>

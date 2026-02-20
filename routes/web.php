@@ -6,8 +6,15 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\MateriController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\VideoController;
+use App\Http\Controllers\AnalysisController;
 
 
+Route::post('/simulation/save', [CableController::class, 'saveResult'])
+    ->name('simulation.save');
+
+Route::get('/analisis', [AnalysisController::class, 'dashboard'])
+    ->middleware('auth')
+    ->name('analisis.dashboard');
 
 Route::get('/login', [AuthController::class, 'login'])->name('login');
 Route::post('/login', [AuthController::class, 'authenticate'])->name('login.authenticate');

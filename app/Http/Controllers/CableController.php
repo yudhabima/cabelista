@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Video;
 use App\Models\Material;
+use App\Models\SimulationResult;
 
 
 class CableController extends Controller
@@ -86,4 +87,35 @@ class CableController extends Controller
             'matchB' => $scoreB,
         ]);
     }
+
+    public function saveResult(Request $request)
+{
+    try {
+
+        SimulationResult::create([
+            'name' => $request->name,
+            'absen' => $request->absen,
+            'score' => $request->score,
+            'status_t568a' => $request->status_t568a,
+            'status_t568b' => $request->status_t568b,
+            'time_used' => $request->time_used,
+            'cable_used' => $request->cable_used,
+            'rj45_used' => $request->rj45_used,
+        ]);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Data berhasil disimpan'
+        ]);
+
+    } catch (\Exception $e) {
+
+        return response()->json([
+            'status' => 'error',
+            'message' => 'Gagal menyimpan data'
+        ], 500);
+
+    }
+}
+
 }
