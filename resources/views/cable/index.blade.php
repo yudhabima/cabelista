@@ -182,7 +182,7 @@
         }
 
         .material-card img {
-            width: 50px;
+            width: 100px;
             height: 80px;
             margin-bottom: 20px;
         }
@@ -466,7 +466,23 @@
     @endif
         
     <div class="materials-grid">
-    @forelse($materials as $material)
+    
+    
+            <div class="material-card">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3E%3Cg%3E%3Crect x='20' y='30' width='30' height='40' fill='%2366BB6A'/%3E%3Crect x='20' y='50' width='30' height='40' fill='%23EF5350'/%3E%3Crect x='20' y='70' width='30' height='40' fill='%232196F3'/%3E%3C/g%3E%3C/svg%3E" alt="Books">
+                <h3>Pengenalan Kabel UTP</h3>
+                <p>Mempelajari standar T568A dan T568B untuk susunan kabel straight dan cross</p>
+                <a href="{{ url('/materi2') }}" class="btn-secondary">Pilih</a>
+            </div>
+            
+            <div class="material-card">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3E%3Cg%3E%3Crect x='20' y='30' width='30' height='40' fill='%2366BB6A'/%3E%3Crect x='20' y='50' width='30' height='40' fill='%23EF5350'/%3E%3Crect x='20' y='70' width='30' height='40' fill='%232196F3'/%3E%3C/g%3E%3C/svg%3E" alt="Books">
+                <h3>Susunan Warna Kabel</h3>
+                <p>Mempelajari standar T568A dan T568B untuk susunan kabel straight dan cross</p>
+                <a href="{{ url('/materi3') }}" class="btn-secondary">Pilih</a>
+            </div>
+
+            @forelse($materials as $material)
         <div class="material-card">
         <img src="{{ $material->image
             ? asset('storage/'.$material->image)
@@ -482,20 +498,6 @@
     @empty
         <p style="color:white">Belum ada materi</p>
     @endforelse
-    
-            <div class="material-card">
-                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3E%3Cg%3E%3Crect x='20' y='30' width='30' height='40' fill='%2366BB6A'/%3E%3Crect x='20' y='50' width='30' height='40' fill='%23EF5350'/%3E%3Crect x='20' y='70' width='30' height='40' fill='%232196F3'/%3E%3C/g%3E%3C/svg%3E" alt="Books">
-                <h3>Susunan Warna Kabel</h3>
-                <p>Mempelajari standar T568A dan T568B untuk susunan kabel straight dan cross</p>
-                <a href="{{ url('/materi2') }}" class="btn-secondary">Pilih</a>
-            </div>
-            
-            <div class="material-card">
-                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3E%3Cg%3E%3Crect x='20' y='30' width='30' height='40' fill='%2366BB6A'/%3E%3Crect x='20' y='50' width='30' height='40' fill='%23EF5350'/%3E%3Crect x='20' y='70' width='30' height='40' fill='%232196F3'/%3E%3C/g%3E%3C/svg%3E" alt="Books">
-                <h3>Teknik Crimping</h3>
-                <p>Langkah-langkah praktis menggunakan tang crimping</p>
-                <a href="{{ url('/materi3') }}" class="btn-secondary">Pilih</a>
-            </div>
         </div>
     </div>
 

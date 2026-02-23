@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Lab Virtual Jaringan - Platform Pembelajaran TKJ</title>
+    <title>Materi Cabelista</title>
     
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -540,7 +540,7 @@
                                 <span class="text-yellow-700 font-semibold text-sm">🎯 Kuis Pemahaman</span>
                             </div>
                             <h3 class="text-2xl font-bold text-gray-800 mb-2">Uji Pemahaman Anda</h3>
-                            <p class="text-gray-600">Jawab pertanyaan berikut untuk menyelesaikan Level 1</p>
+                            <p class="text-gray-600">Jawab pertanyaan berikut untuk menyelesaikan materi ini</p>
                         </div>
 
                         <div id="quiz-container" class="space-y-6">
@@ -700,27 +700,27 @@
         </div>
 
         <div class="flex items-center gap-2">
-            <div class="step-indicator w-8 h-8 rounded-full bg-gray-700 flex items-center justify-center text-white text-xs font-bold" data-step="1">1</div>
+            <div class="step-indicator w-8 h-8 rounded-full bg-gray-400 flex items-center justify-center text-white text-xs font-bold" data-step="1">1</div>
             <div  class="text-xs text-gray-700 font-bold">Memahami definisi UTP</div>
         </div>
 
         <div class="flex items-center gap-2">
-            <div class="step-indicator w-8 h-8 rounded-full bg-gray-700 flex items-center justify-center text-white text-xs font-bold" data-step="2">2</div>
+            <div class="step-indicator w-8 h-8 rounded-full bg-gray-400 flex items-center justify-center text-white text-xs font-bold" data-step="2">2</div>
             <div  class="text-xs text-gray-700 font-bold">Mengenali struktur kabel</div>
         </div>
 
         <div class="flex items-center gap-2">
-            <div class="step-indicator w-8 h-8 rounded-full bg-gray-700 flex items-center justify-center text-white text-xs font-bold" data-step="3">3</div>
+            <div class="step-indicator w-8 h-8 rounded-full bg-gray-400 flex items-center justify-center text-white text-xs font-bold" data-step="3">3</div>
             <div  class="text-xs text-gray-700 font-bold">Memahami fungsi twisted pair</div>
         </div>
 
         <div class="flex items-center gap-2">
-            <div class="step-indicator w-8 h-8 rounded-full bg-gray-700 flex items-center justify-center text-white text-xs font-bold" data-step="4">4</div>
+            <div class="step-indicator w-8 h-8 rounded-full bg-gray-400 flex items-center justify-center text-white text-xs font-bold" data-step="4">4</div>
             <div  class="text-xs text-gray-700 font-bold">Mengetahui kategori kabel</div>
         </div>
 
         <div class="flex items-center gap-2">
-            <div class="step-indicator w-8 h-8 rounded-full bg-gray-700 flex items-center justify-center text-white text-xs font-bold" data-step="5">5</div>
+            <div class="step-indicator w-8 h-8 rounded-full bg-gray-400 flex items-center justify-center text-white text-xs font-bold" data-step="5">5</div>
             <div  class="text-xs text-gray-700 font-bold">Menyelesaikan kuis akhir</div>
         </div>
     </div>
@@ -821,19 +821,24 @@
             
             renderObjectives();
             
-            // Update step indicators
-            for (let i = 1; i <= 5; i++) {
-                const step = document.querySelector(`[data-step="${i}"]`);
-                if (i < state.currentSection) {
-                    step.classList.add('completed');
-                    step.classList.remove('active');
-                } else if (i === state.currentSection) {
-                    step.classList.add('active');
-                    step.classList.remove('completed');
-                } else {
-                    step.classList.remove('completed', 'active');
-                }
-            }
+            document.querySelectorAll('.step-indicator').forEach(step => {
+    const stepNumber = parseInt(step.dataset.step);
+
+    // RESET dulu
+    step.classList.remove('active', 'completed');
+    step.classList.add('bg-gray-300');
+    step.innerHTML = stepNumber;
+
+    if (stepNumber < state.currentSection) {
+        step.classList.remove('bg-gray-300');
+        step.classList.add('completed');
+        step.innerHTML = "✓";
+    } 
+    else if (stepNumber === state.currentSection) {
+        step.classList.remove('bg-gray-300');
+        step.classList.add('active');
+    }
+});
             
             // Check if all completed
             if (state.objectives.every(o => o.completed)) {

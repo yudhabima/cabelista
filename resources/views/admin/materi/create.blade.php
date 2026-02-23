@@ -6,6 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Create Materi Gamifikasi</title>
 <script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/6.8.3/tinymce.min.js"></script>
 
 <style>
     body {
@@ -39,7 +40,7 @@
     <p class="text-gray-500">Lengkapi informasi materi, langkah pembelajaran, dan quiz.</p>
 </div>
 
-<form action="{{ route('materi.store') }}" method="POST" enctype="multipart/form-data">
+<form action="{{ route('materi.store') }}" method="POST" enctype="multipart/form-data"onsubmit="tinymce.triggerSave();">
 @csrf
 
 {{-- ================= INFO MATERI ================= --}}
@@ -99,7 +100,7 @@
             <input type="text" name="steps[0][title]" class="w-full mt-1 rounded-lg border-2 border-gray-300 px-3 py-2" placeholder="Contoh: Memahami definisi UTP">
 
             <label class="font-semibold text-sm mt-4 block">Isi Materi</label>
-            <textarea name="steps[0][content]" rows="3" class="w-full mt-1 rounded-lg border-2 border-gray-300 px-2 py-1"></textarea>
+            <textarea id="step-content-0" name="steps[0][content]" rows="3" class="w-full mt-1 rounded-lg border-2 border-gray-300 px-2 py-1"></textarea>
 
             <label class="font-semibold text-sm mt-4 block">Progress Level (%)</label>
             <input type="number" name="steps[0][progress]" class="w-full mt-1 rounded-lg border-2 border-gray-300 px-3 py-2" value="10">
@@ -165,35 +166,55 @@
 {{-- ================= JS ================= --}}
 
 <script>
+function initTinyMCE(selector) {
+    tinymce.init({
+        selector: selector,
+        height: 250,
+        menubar: false,
+        elementpath: false,
+        plugins: 'lists link',
+        toolbar: 'undo redo | formatselect | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat',
+        branding: false, // Menghilangkan tulisan "Powered by TinyMCE"
+        promotion: false // Menghilangkan tombol upgrade
+    });
+}
 
+// Inisialisasi editor untuk form langkah pertama saat halaman dimuat
+document.addEventListener("DOMContentLoaded", function() {
+    initTinyMCE('#step-content-0');
+});
+
+// ================= STEPS =================
 let stepIndex = 1;
 
 function addStep() {
+    // Buat ID unik untuk textarea baru
+    const stepId = `step-content-${stepIndex}`;
 
     const html = `
 <div class="border rounded-xl p-6 bg-gray-50 animate-fade-in relative">
 
-    <button type="button"
-        onclick="removeItem(this)"
+    <button type="button" 
+        onclick="removeItem(this, '${stepId}')" 
         class="absolute top-3 right-3 bg-red-500 text-white px-3 py-1 rounded-lg text-sm hover:bg-red-600">
         Hapus
     </button>
 
     <label class="font-semibold text-sm">Judul Langkah</label>
-    <input type="text"
-        name="steps[${stepIndex}][title]"
+    <input type="text" 
+        name="steps[${stepIndex}][title]" 
         class="w-full mt-1 rounded-lg border-2 border-gray-300 px-3 py-2">
 
     <label class="font-semibold text-sm mt-4 block">Isi Materi</label>
-    <textarea
-        name="steps[${stepIndex}][content]"
-        rows="3"
+    <textarea id="${stepId}"
+        name="steps[${stepIndex}][content]" 
+        rows="3" 
         class="w-full mt-1 rounded-lg border-2 border-gray-300 px-2 py-1"></textarea>
 
     <label class="font-semibold text-sm mt-4 block">Progress Level (%)</label>
-    <input type="number"
-        name="steps[${stepIndex}][progress]"
-        class="w-full mt-1 rounded-lg border-2 border-gray-300 px-3 py-2"
+    <input type="number" 
+        name="steps[${stepIndex}][progress]" 
+        class="w-full mt-1 rounded-lg border-2 border-gray-300 px-3 py-2" 
         value="10">
 </div>
 `;
@@ -201,6 +222,9 @@ function addStep() {
     document
         .getElementById('steps-container')
         .insertAdjacentHTML('beforeend', html);
+
+    // Inisialisasi TinyMCE pada textarea yang baru saja ditambahkan
+    initTinyMCE(`#${stepId}`);
 
     stepIndex++;
 }
@@ -250,7 +274,11 @@ function addQuiz() {
     quizIndex++;
 }
 
-function removeItem(button) {
+function removeItem(button, editorId = null) {
+    if(editorId) {
+        // Hapus instance TinyMCE terlebih dahulu jika ada
+        tinymce.get(editorId)?.remove();
+    }
     button.parentElement.remove();
 }
 

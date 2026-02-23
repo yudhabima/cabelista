@@ -56,6 +56,92 @@
         .hidden { display: none !important; }
         @keyframes slideDown { from { transform: translateY(-20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
         @keyframes cutAnim { 0% { opacity: 1; } 50% { opacity: 0; transform: scale(0.9); } 100% { opacity: 1; transform: scale(1); } }
+        /* Container Crimp Tool */
+.crimpTool {
+    position: absolute;
+    left: 50%;
+    /* Geser posisi sedikir agar kepala hitam pas di tengah RJ45 */
+    transform: translateX(-40px) scale(1.5);
+    transform-origin: 40px center;
+    width: 280px;
+    height: 180px;
+    display: none;
+    z-index: 60;
+    pointer-events: none;
+}
+
+/* Bagian atas kepala (kotak kecil bergaris biru/abu) */
+.head-top {
+    position: absolute;
+    left: 15px;
+    top: 15px;
+    width: 50px;
+    height: 15px;
+    border: 5px solid #64748b;
+    border-bottom: none;
+    background: transparent;
+}
+
+/* Gagang panjang abu-abu di sebelah kanan */
+.crimper-handle {
+    position: absolute;
+    left: 80px; /* Mulai setelah kepala hitam */
+    top: 30px;
+    width: 200px;
+    height: 80px;
+    background: #6b6b6b;
+}
+
+/* Kepala utama tang (kotak hitam) */
+.head-main {
+    position: absolute;
+    left: 0;
+    top: 30px;
+    width: 80px;
+    height: 80px;
+    background: #000000;
+    z-index: 2;
+}
+
+/* Bagian bawah berstruktur "H" */
+.head-bottom {
+    position: absolute;
+    left: 0;
+    top: 110px;
+    width: 80px;
+    height: 60px;
+    border: 5px solid #64748b;
+    border-top: none;
+    background: transparent;
+}
+
+/* Garis tengah horizontal pembentuk huruf "H" */
+.head-bottom::before {
+    content: '';
+    position: absolute;
+    top: 15px;
+    left: -5px; /* Sesuaikan dengan tebal border */
+    width: calc(100% + 10px);
+    height: 5px;
+    background: #64748b;
+}
+
+.pin-locked {
+    background: orange !important;
+    transition: 0.3s;
+}
+
+.cable-shake {
+    animation: shake 0.3s ease;
+}
+
+@keyframes shake {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-3px); }
+    50% { transform: translateX(3px); }
+    75% { transform: translateX(-3px); }
+    100% { transform: translateX(0); }
+}
         .logo img {
             height: 45px; /* ukuran logo */
             width: auto;
@@ -76,6 +162,11 @@
             padding-top: 3px;
             padding-bottom: 20px;
             font-weight: 500;
+        }
+        .tool-icon img {
+            width: 40px;
+            height: 40px;
+            object-fit: contain;
         }
         .btn-primary { background: var(--danger); color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: bold; transition: 0.2s; }
         /* Loading Spinner */
@@ -116,10 +207,18 @@
                 <div id="gloveStatus" style="position:absolute; top:5px; right:5px; width:10px; height:10px; border-radius:50%; background:red;"></div>
             </div>
             <div class="tool-box" draggable="true" ondragstart="dragTool(event, 'cutter')">
-                <div class="tool-icon">✂️</div><div class="tool-name">Cable Cutter</div>
+                <div class="tool-icon">
+                    <img src="{{ asset('assets/img/cable-cutter.png') }}" 
+                         alt="Cable Cutter" 
+                         class="w-10 h-10 object-contain">
+                </div><div class="tool-name">Cable Cutter</div>
             </div>
             <div class="tool-box" draggable="true" ondragstart="dragTool(event, 'stripper')">
-                <div class="tool-icon">🔨</div><div class="tool-name">Wire Stripper</div>
+                <div class="tool-icon">
+                    <img src="{{ asset('assets/img/Cable-Stripper.png') }}" 
+                         alt="Cable Stripper" 
+                         class="w-10 h-10 object-contain">
+                </div><div class="tool-name">Cable Stripper</div>
             </div>
         </div>
 
@@ -132,23 +231,35 @@
             <div class="cable-assembly" id="cableAssembly">
                 <div id="cableJacket" class="cable-jacket"></div>
                 <div id="wiresZone" class="wires-zone"></div>
-                <div id="rj45Visual" style="position:absolute; top:-20px; display:none; font-size:2em;">🔌</div>
+                <div id="rj45Visual" style="position:absolute; top:-20px; display:none; font-size:2em;">
+                    <img src="{{ asset('assets/img/rj45.png') }}" alt="RJ45" class="w-12 h-12 object-contain">
+                </div>
+                <div id="crimpTool" class="crimpTool">
+                    <div class="head-top"></div>
+                    <div class="crimper-handle"></div>
+                    <div class="head-main"></div>
+                    <div class="head-bottom"></div>
+</div>
             </div>
         </div>
 
         <div class="sidebar">
             <h3>Equip <span style="font-size:0.7em">(Tap)</span></h3>
             <div class="tool-box" onclick="equipRJ45()">
-                <div class="tool-icon">🔌</div><div class="tool-name">RJ45 Conn</div>
+                <div class="tool-icon">
+                <img src="{{ asset('assets/img/rj45.png') }}" 
+             alt="RJ45" 
+             class="w-10 h-10 object-contain">   
+                </div><div class="tool-name">RJ45 Conn</div>
             </div>
             <div class="tool-box" onclick="useCrimper()">
-                <div class="tool-icon">🗜️</div><div class="tool-name">Crimper</div>
+                <div class="tool-icon">
+                <img src="{{ asset('assets/img/crimp-tool.png') }}"
+             alt="Crimper"             class="w-10 h-10 object-contain">
+                </div><div class="tool-name">Crimp Tool</div>
             </div>
             <div class="tool-box" onclick="openTester()">
                 <div class="tool-icon">📟</div><div class="tool-name">Tester</div>
-            </div>
-            <div class="tool-box" onclick="useMultimeter()">
-                <div class="tool-icon">⚡</div><div class="tool-name">Multimeter</div>
             </div>
         </div>
     </div>
@@ -372,29 +483,56 @@
 
         // --- TOOLS ---
         function useCrimper() {
-    // 1. Cek Safety
+
     if(!s.gloves) return showToast("PAKAI GLOVES! 🧤");
-    
-    // 2. Cek Kondisi Kabel
     if(!s.rj45Attached) return showToast("Pasang RJ45 dulu!");
     if(s.isCrimped) return showToast("Sudah di-crimping! 🔒");
 
-    // 3. Proses Crimping (Animasi Sederhana)
     const visual = document.getElementById('rj45Visual');
-    
-    // Efek visual 'ditekan'
-    visual.style.transform = "scale(0.9)";
-    visual.style.filter = "brightness(0.8)";
-    
+    const tool = document.getElementById("crimpTool");
+    const cable = document.getElementById("cableAssembly");
+
+    // 🔥 Ambil posisi RJ45 relatif ke parent
+    const rjRect = visual.getBoundingClientRect();
+    const parentRect = cable.getBoundingClientRect();
+
+    const rjTopRelative = rjRect.top - parentRect.top;
+
+    // Tampilkan tang
+    tool.style.display = "block";
+
+    // Posisi awal tang (di atas RJ45)
+    tool.style.top = (rjTopRelative - 120) + "px";
+
     setTimeout(() => {
+
+        // Turun tepat ke RJ45
+        tool.style.top = (rjTopRelative - 20) + "px";
+
+        // Efek tekan
+        visual.style.transform = "scale(0.9)";
+        visual.style.filter = "brightness(0.7)";
+        cable.classList.add("cable-shake");
+
+    }, 50);
+
+    setTimeout(() => {
+
+        // Kembalikan
+        tool.style.top = (rjTopRelative - 120) + "px";
         visual.style.transform = "scale(1)";
         visual.style.filter = "none";
-        
-        // 4. Update State
+        cable.classList.remove("cable-shake");
+
         s.isCrimped = true;
         showToast("Kabel berhasil di-crimping! ✅", "info");
         saveSession();
-    }, 500);
+
+    }, 400);
+
+    setTimeout(() => {
+        tool.style.display = "none";
+    }, 700);
 }
 
         function toggleGloves() { 
@@ -530,7 +668,7 @@
             saveSession();
         }
 
-        function useMultimeter() { alert("Multimeter: Short Circuit Test OK."); }
+        //function useMultimeter() { alert("Multimeter: Short Circuit Test OK."); }
 
         // --- TESTER & SCORING ---
         function generateSlots() {
@@ -575,14 +713,14 @@
 
     let score = 100;
 
-    if(!s.finalResult){
-    alert("Jalankan TESTER terlebih dahulu!");
-    return;
-}
-else {
-        score -= Math.floor(s.cableUsed / 5) * 2;
+    if (s.finalResult === 'FAIL') {
+        // Jika urutan kabel salah, nilai mutlak 0
+        score = 0; 
+    } else {
+        // Jika berhasil (T568A atau T568B), hitung penalti pemakaian bahan & waktu
+        score -= Math.floor(s.cableUsed / 5) * 10;
         if(s.rjCount > 1) score -= (s.rjCount - 1) * 5;
-        if(s.elapsedTime > 180) score -= Math.floor((s.elapsedTime - 180)/10);
+        if(s.elapsedTime > 150) score -= Math.floor((s.elapsedTime - 150)/10);
     }
 
     if(score < 0) score = 0;

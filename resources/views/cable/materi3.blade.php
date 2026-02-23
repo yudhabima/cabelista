@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Lab Virtual Jaringan - Level 2: Urutan Warna Kabel</title>
+    <title>Materi Cabelista</title>
     
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -121,6 +121,17 @@
             font-size: 10px;
             font-weight: bold;
         }
+
+        .logo img {
+            height: 45px; /* ukuran logo */
+            width: auto;
+            display: block;
+        }
+
+        .validation-result {
+    min-height: 100px;
+    transition: all 0.3s ease;
+}
     </style>
 </head>
 <body class="bg-gradient-to-br from-blue-50 via-white to-green-50 min-h-screen">
@@ -129,14 +140,8 @@
         <div class="bg-white rounded-2xl shadow-xl p-4 mb-4 border-b-4 border-blue-500">
             <div class="flex items-center justify-between">
                 <div class="flex items-center gap-2">
-                    <div class="bg-gradient-to-br from-blue-600 to-blue-800 p-3 rounded-xl">
-                        <i data-lucide="zap" class="text-yellow-300" style="width: 28px; height: 28px;"></i>
-                    </div>
-                    <div>
-                        <h1 class="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                            Lab Virtual Jaringan
-                        </h1>
-                        <p class="text-xs text-gray-500">Platform Pembelajaran Interaktif TKJ</p>
+                        <div class="logo">
+                 <img src="/assets/img/logo-cabelista.png" alt="Logo Cabelista">
                     </div>
                 </div>
                 
@@ -146,7 +151,7 @@
                             <i data-lucide="zap" class="text-white" style="width: 20px; height: 20px;"></i>
                             <div class="text-white">
                                 <div class="text-xs font-medium">XP Points</div>
-                                <div class="text-xl font-bold" id="xp-value">500</div>
+                                <div class="text-xl font-bold" id="xp-value">0</div>
                             </div>
                         </div>
                         <div class="w-32 bg-white/30 rounded-full h-1.5 mt-1">
@@ -159,93 +164,25 @@
                             <i data-lucide="star" class="text-yellow-300" style="width: 20px; height: 20px;"></i>
                             <div class="text-white">
                                 <div class="text-xs font-medium">Skor Total</div>
-                                <div class="text-xl font-bold" id="score-value">800</div>
+                                <div class="text-xl font-bold" id="score-value">0</div>
                             </div>
                         </div>
                     </div>
                     
-                    <div class="flex gap-2">
-                        <div class="w-12 h-12 rounded-full flex items-center justify-center text-2xl shadow-lg bg-gradient-to-br from-yellow-400 to-orange-500 scale-100" id="badge-1" title="Pemula">
-                            🥉
-                        </div>
-                        <div class="w-12 h-12 rounded-full flex items-center justify-center text-2xl shadow-lg bg-gray-300 opacity-50 scale-90" id="badge-2" title="Ahli Warna">
-                            🎨
-                        </div>
-                        <div class="w-12 h-12 rounded-full flex items-center justify-center text-2xl shadow-lg bg-gray-300 opacity-50 scale-90" id="badge-3" title="Master Kabel">
-                            🏆
-                        </div>
+                    <div class="flex items-center gap-3 bg-gray-100">
                     </div>
-                    
-                    <div class="flex items-center gap-3 bg-gray-100 rounded-xl p-3">
-                        <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-lg shadow-md">
-                            L2
-                        </div>
-                        <div>
-                            <div class="text-sm font-semibold text-gray-700">Siswa SMK</div>
-                            <div class="text-xs text-gray-500">TKJ - Level 2</div>
-                        </div>
                     </div>
-                </div>
             </div>
         </div>
 
         <div class="flex gap-4">
             <!-- Left Sidebar -->
-            <div class="w-72 space-y-4">
-                <div class="bg-white rounded-2xl shadow-xl p-5 border-t-4 border-blue-500">
-                    <div class="flex items-center gap-2 mb-4">
-                        <i data-lucide="book-open" class="text-blue-600" style="width: 24px; height: 24px;"></i>
-                        <h3 class="font-bold text-lg text-gray-800">Jalur Pembelajaran</h3>
-                    </div>
-                    <div class="space-y-3" id="learning-path"></div>
-                </div>
-
-                <div class="bg-white rounded-2xl shadow-xl p-5 border-t-4 border-green-500">
-                    <h3 class="font-bold text-gray-800 mb-3 flex items-center gap-2">
-                        <i data-lucide="info" class="text-green-500" style="width: 20px; height: 20px;"></i>
-                        Progres Level
-                    </h3>
-                    <div class="mb-3">
-                        <div class="flex justify-between text-sm mb-2">
-                            <span class="text-gray-600">Penyelesaian</span>
-                            <span class="text-green-600 font-bold" id="progress-percentage">0%</span>
-                        </div>
-                        <div class="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
-                            <div class="bg-gradient-to-r from-green-400 to-green-600 h-full transition-all duration-500" id="progress-bar" style="width: 0%"></div>
-                        </div>
-                    </div>
-                    
-                    <div class="mt-4 space-y-2">
-                        <div class="text-xs font-semibold text-gray-600 mb-2">Langkah Pembelajaran:</div>
-                        <div class="flex items-center gap-2">
-                            <div class="step-indicator w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center text-white text-xs font-bold" data-step="1">1</div>
-                            <div class="flex-1 h-1 bg-gray-300"></div>
-                        </div>
-                        <div class="flex items-center gap-2">
-                            <div class="step-indicator w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center text-white text-xs font-bold" data-step="2">2</div>
-                            <div class="flex-1 h-1 bg-gray-300"></div>
-                        </div>
-                        <div class="flex items-center gap-2">
-                            <div class="step-indicator w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center text-white text-xs font-bold" data-step="3">3</div>
-                            <div class="flex-1 h-1 bg-gray-300"></div>
-                        </div>
-                        <div class="flex items-center gap-2">
-                            <div class="step-indicator w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center text-white text-xs font-bold" data-step="4">4</div>
-                        </div>
-                    </div>
-                    
-                    <div class="text-xs text-gray-600 bg-blue-50 p-3 rounded-lg mt-4">
-                        💡 <span class="font-semibold">Tips:</span> Tarik kabel ke slot yang sesuai dengan standar T568A/B!
-                    </div>
-                </div>
-            </div>
-
             <!-- Main Content Area -->
             <div class="flex-1">
                 <div class="bg-white rounded-2xl shadow-xl p-6 border-t-4 border-purple-500">
                     <div class="text-center mb-6">
                         <div class="inline-block bg-orange-100 px-4 py-2 rounded-full mb-3">
-                            <span class="text-orange-700 font-semibold text-sm">Level 2: Urutan Warna Kabel</span>
+                            <span class="text-orange-700 font-semibold text-sm">Urutan Warna Kabel</span>
                         </div>
                         <h2 class="text-3xl font-bold bg-gradient-to-r from-orange-600 to-pink-600 bg-clip-text text-transparent mb-2">
                             Standar Pengkabelan T568A & T568B
@@ -536,82 +473,46 @@
 
             <!-- Right Sidebar -->
             <div class="w-80 space-y-4">
-                <div class="bg-white rounded-2xl shadow-xl p-5 border-t-4 border-orange-500">
-                    <div class="flex items-center gap-2 mb-4">
-                        <i data-lucide="target" class="text-orange-600" style="width: 24px; height: 24px;"></i>
-                        <h3 class="font-bold text-lg text-gray-800">Misi Saat Ini</h3>
-                    </div>
-                    <div class="bg-gradient-to-r from-orange-500 to-pink-500 text-white rounded-xl p-5 mb-4 shadow-lg">
-                        <h4 class="font-bold text-xl mb-2">Kuasai Urutan Warna</h4>
-                        <p class="text-sm opacity-90 mb-3">Pelajari standar T568A & T568B</p>
-                        <div class="flex items-center gap-2 text-xs bg-white/20 rounded-lg p-2">
-                            <i data-lucide="award" style="width: 16px; height: 16px;"></i>
-                            <span>Reward: 400 Poin + 200 XP</span>
+                <div class="bg-white rounded-2xl shadow-xl p-5 border-t-4 border-green-500">
+                    <h3 class="font-bold text-gray-800 mb-3 flex items-center gap-2">
+                        <i data-lucide="info" class="text-green-500" style="width: 20px; height: 20px;"></i>
+                        Progres Level
+                    </h3>
+                    <div class="mb-3">
+                        <div class="flex justify-between text-sm mb-2">
+                            <span class="text-gray-600">Penyelesaian</span>
+                            <span class="text-green-600 font-bold" id="progress-percentage">0%</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
+                            <div class="bg-gradient-to-r from-green-400 to-green-600 h-full transition-all duration-500" id="progress-bar" style="width: 0%"></div>
                         </div>
                     </div>
-
-                    <div class="bg-gray-50 rounded-xl p-4 mb-4">
-                        <h4 class="font-bold text-gray-700 text-sm mb-3 flex items-center gap-2">
-                            <i data-lucide="check-circle" class="text-blue-500" style="width: 16px; height: 16px;"></i>
-                            Tujuan Pembelajaran:
-                        </h4>
-                        <div class="space-y-2 text-sm" id="objectives-list"></div>
-                    </div>
-
-                    <div id="mission-complete" class="bg-gradient-to-r from-green-500 to-emerald-500 rounded-xl p-4 text-center" style="display: none;">
-                        <i data-lucide="check-circle" class="text-white mx-auto mb-2" style="width: 32px; height: 32px;"></i>
-                        <div class="text-white font-bold">Misi Selesai!</div>
-                        <div class="text-white text-sm opacity-90">Level 3 Terbuka</div>
-                    </div>
-                </div>
-
-                <div class="bg-gradient-to-br from-blue-50 to-cyan-50 rounded-2xl shadow-xl p-5 border-2 border-blue-300">
-                    <h4 class="font-bold text-blue-900 mb-3 flex items-center gap-2">
-                        <i data-lucide="info" class="text-blue-600" style="width: 20px; height: 20px;"></i>
-                        Referensi Cepat
-                    </h4>
                     
-                    <div class="bg-white rounded-lg p-3 mb-3">
-                        <h5 class="text-xs font-bold text-gray-700 mb-2">T568A (Hijau Duluan):</h5>
-                        <div class="text-xs text-gray-600 space-y-1">
-                            <div>1. Hijau-Putih</div>
-                            <div>2. Hijau</div>
-                            <div>3. Orange-Putih</div>
-                            <div>4. Biru</div>
-                            <div>5. Biru-Putih</div>
-                            <div>6. Orange</div>
-                            <div>7. Coklat-Putih</div>
-                            <div>8. Coklat</div>
+                    <div class="mt-4 space-y-2">
+                        <div class="text-xs font-semibold text-gray-600 mb-2">Langkah Pembelajaran:</div>
+                        <div class="flex items-center gap-2">
+                            <div class="step-indicator w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center text-white text-xs font-bold" data-step="1">1</div>
+                            <div  class="text-xs text-gray-700 font-bold">Memahami standar TIA/EIA-568</div>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <div class="step-indicator w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center text-white text-xs font-bold" data-step="2">2</div>
+                            <div  class="text-xs text-gray-700 font-bold">Mengenal urutan T568A</div>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <div class="step-indicator w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center text-white text-xs font-bold" data-step="3">3</div>
+                            <div  class="text-xs text-gray-700 font-bold">Mengenal urutan T568B</div>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <div class="step-indicator w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center text-white text-xs font-bold" data-step="4">4</div>
+                            <div  class="text-xs text-gray-700 font-bold">Praktik menyusun kabel</div>
                         </div>
                     </div>
-
-                    <div class="bg-white rounded-lg p-3">
-                        <h5 class="text-xs font-bold text-gray-700 mb-2">T568B (Orange Duluan):</h5>
-                        <div class="text-xs text-gray-600 space-y-1">
-                            <div>1. Orange-Putih</div>
-                            <div>2. Orange</div>
-                            <div>3. Hijau-Putih</div>
-                            <div>4. Biru</div>
-                            <div>5. Biru-Putih</div>
-                            <div>6. Hijau</div>
-                            <div>7. Coklat-Putih</div>
-                            <div>8. Coklat</div>
-                        </div>
+                    
+                    <div class="text-xs text-gray-600 bg-blue-50 p-3 rounded-lg mt-4">
+                        💡 <span class="font-semibold">Tips:</span> Tarik kabel ke slot yang sesuai dengan standar T568A/B!
                     </div>
                 </div>
-
-                <div class="bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl shadow-xl p-5 border-2 border-purple-300">
-                    <div class="flex items-center gap-2 mb-3">
-                        <i data-lucide="lightbulb" class="text-yellow-500" style="width: 20px; height: 20px;"></i>
-                        <h4 class="font-bold text-purple-800">Tips Menghapal</h4>
-                    </div>
-                    <div class="text-sm text-purple-900 space-y-2">
-                        <p>🎨 <strong>T568A:</strong> "Hijau dulu, Orange kemudian"</p>
-                        <p>🔶 <strong>T568B:</strong> "Orange dulu, Hijau kemudian"</p>
-                        <p>💙 Pasangan Biru & Coklat tetap sama di kedua standar (PIN 4-5 & 7-8)</p>
-                        <p>✨ Yang bertukar hanya Orange dan Hijau di PIN 1-2-3-6</p>
-                    </div>
-                </div>
+            </div>    
             </div>
         </div>
     </div>
@@ -624,13 +525,8 @@
             xp: 500,
             currentSection: 1,
             selectedStandard: 'T568A',
-            levels: [
-                { id: 1, name: 'Pengenalan', icon: '📚', status: 'completed', desc: 'Dasar-dasar kabel UTP' },
-                { id: 2, name: 'Urutan Warna', icon: '🎨', status: 'active', desc: 'Standar pewarnaan' },
-                { id: 3, name: 'Kabel Straight', icon: '🔌', status: 'locked', desc: 'Praktik T568B' },
-                { id: 4, name: 'Kabel Cross', icon: '⚡', status: 'locked', desc: 'Koneksi berbeda' },
-                { id: 5, name: 'Troubleshooting', icon: '🔧', status: 'locked', desc: 'Pemecahan masalah' }
-            ],
+            quizAnswers: [false, false, false, false, false],
+            completedSections: [false, false, false, false, false],
             objectives: [
                 { id: 1, text: 'Memahami standar TIA/EIA-568', completed: false },
                 { id: 2, text: 'Mengenal urutan T568A', completed: false },
@@ -653,33 +549,6 @@
             },
             placedWires: [null, null, null, null, null, null, null, null]
         };
-
-        function renderLearningPath() {
-            const container = document.getElementById('learning-path');
-            container.innerHTML = state.levels.map((level, idx) => `
-                <div class="relative">
-                    ${idx > 0 ? `<div class="absolute left-6 -top-3 w-1 h-3 ${level.status === 'completed' ? 'bg-green-400' : 'bg-gray-300'}"></div>` : ''}
-                    <div class="flex items-center gap-3 p-3 rounded-xl transition-all ${
-                        level.status === 'active' ? 'bg-gradient-to-r from-orange-100 to-pink-50 border-2 border-orange-500 shadow-md' :
-                        level.status === 'completed' ? 'bg-green-50 border-2 border-green-400' :
-                        'bg-gray-50 border-2 border-gray-200 opacity-60'
-                    }">
-                        <div class="w-12 h-12 rounded-xl flex items-center justify-center text-2xl shadow-md ${
-                            level.status === 'active' ? 'bg-gradient-to-br from-orange-500 to-pink-600' :
-                            level.status === 'completed' ? 'bg-gradient-to-br from-green-500 to-green-600' :
-                            'bg-gray-300'
-                        }">
-                            ${level.status === 'completed' ? '✓' : level.icon}
-                        </div>
-                        <div class="flex-1">
-                            <div class="font-bold text-sm text-gray-800">${level.name}</div>
-                            <div class="text-xs text-gray-500">${level.desc}</div>
-                        </div>
-                        ${level.status === 'active' ? '<div class="w-2 h-2 bg-orange-500 rounded-full animate-pulse"></div>' : ''}
-                    </div>
-                </div>
-            `).join('');
-        }
 
         function renderObjectives() {
             const container = document.getElementById('objectives-list');
@@ -718,47 +587,53 @@
                     step.classList.remove('completed', 'active');
                 }
             }
-            
-            if (state.objectives.every(o => o.completed)) {
-                document.getElementById('mission-complete').style.display = 'block';
-            }
+            const mission = document.getElementById('mission-complete');
+if (mission && state.objectives.every(o => o.completed)) {
+    mission.style.display = 'block';
+}
         }
 
         function updateScore(points, xp) {
-            state.score += points;
-            state.xp += xp;
-            
-            document.getElementById('score-value').textContent = state.score;
-            document.getElementById('xp-value').textContent = state.xp;
-            
-            const xpPercentage = (state.xp % 1000) / 10;
-            document.getElementById('xp-bar').style.width = xpPercentage + '%';
-            
-            if (state.score >= 1000) {
-                document.getElementById('badge-2').classList.remove('opacity-50', 'scale-90');
-                document.getElementById('badge-2').classList.add('bg-gradient-to-br', 'from-orange-400', 'to-pink-500', 'scale-100');
-            }
-        }
+    state.score += points;
+    state.xp += xp;
+    
+    document.getElementById('score-value').textContent = state.score;
+    document.getElementById('xp-value').textContent = state.xp;
+    
+    const xpPercentage = (state.xp % 1000) / 10;
+    document.getElementById('xp-bar').style.width = xpPercentage + '%';
+    
+    const badge = document.getElementById('badge-2');
+    if (badge && state.score >= 1000) {
+        badge.classList.remove('opacity-50', 'scale-90');
+        badge.classList.add('bg-gradient-to-br', 'from-orange-400', 'to-pink-500', 'scale-100');
+    }
+}
 
         function nextSection(sectionNum) {
-            document.getElementById(`section-${state.currentSection}`).classList.remove('active');
-            
-            if (state.currentSection <= 4) {
-                state.objectives[state.currentSection - 1].completed = true;
-                updateScore(100, 50);
-            }
-            
-            state.currentSection = sectionNum;
-            document.getElementById(`section-${sectionNum}`).classList.add('active');
-            document.getElementById(`section-${sectionNum}`).classList.add('animate-slideIn');
-            
-            if (sectionNum === 4) {
-                initializePractice();
-            }
-            
-            updateProgress();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
+    const current = document.getElementById(`section-${state.currentSection}`);
+    if (current) current.classList.remove('active');
+
+    if (state.currentSection <= 4 && state.objectives[state.currentSection - 1]) {
+        state.objectives[state.currentSection - 1].completed = true;
+        updateScore(100, 50);
+    }
+
+    state.currentSection = sectionNum;
+
+    const next = document.getElementById(`section-${sectionNum}`);
+    if (next) {
+        next.classList.add('active');
+        next.classList.add('animate-slideIn');
+    }
+
+    if (sectionNum === 4) {
+        initializePractice();
+    }
+
+    updateProgress();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
 
         function selectStandard(standard) {
             state.selectedStandard = standard;
@@ -880,49 +755,65 @@
         }
 
         function checkAnswer() {
-            const correctOrder = state.standards[state.selectedStandard];
-            const isCorrect = state.placedWires.every((wire, idx) => wire === correctOrder[idx]);
-            
-            const resultContainer = document.getElementById('validation-result');
-            
-            if (state.placedWires.includes(null)) {
-                resultContainer.innerHTML = `
-                    <div class="bg-yellow-100 border-2 border-yellow-500 rounded-xl p-4 text-center">
-                        <i data-lucide="alert-triangle" class="text-yellow-600 mx-auto mb-2" style="width: 32px; height: 32px;"></i>
-                        <div class="text-yellow-800 font-bold">Belum Lengkap!</div>
-                        <div class="text-yellow-700 text-sm">Silakan lengkapi semua PIN terlebih dahulu</div>
-                    </div>
-                `;
-            } else if (isCorrect) {
-                resultContainer.innerHTML = `
-                    <div class="bg-gradient-to-r from-green-500 to-emerald-500 rounded-xl p-6 text-center text-white animate-slideIn">
-                        <i data-lucide="trophy" class="mx-auto mb-3" style="width: 48px; height: 48px;"></i>
-                        <h3 class="text-2xl font-bold mb-2">Sempurna! 🎉</h3>
-                        <p class="text-lg mb-2">Urutan kabel ${state.selectedStandard} Benar!</p>
-                        <p class="text-sm opacity-90">+100 Poin | +50 XP</p>
-                    </div>
-                `;
+    const correctOrder = state.standards[state.selectedStandard];
+    const resultContainer = document.getElementById('validation-result');
+
+    // FORCE UPDATE UI DULU
+    requestAnimationFrame(() => {
+
+        if (state.placedWires.includes(null)) {
+            showResult('warning', 'Belum Lengkap!', 
+                'Silakan lengkapi semua PIN terlebih dahulu');
+            return;
+        }
+
+        const isCorrect = state.placedWires.every((wire, idx) => 
+            wire === correctOrder[idx]
+        );
+
+        if (isCorrect) {
+            showResult('success', 
+                'Sempurna! 🎉', 
+                `Urutan kabel ${state.selectedStandard} Benar!`
+            );
+
+            if (!state.objectives[3].completed) {
                 state.objectives[3].completed = true;
                 updateScore(100, 50);
                 updateProgress();
-            } else {
-                const wrongPins = state.placedWires.map((wire, idx) => 
-                    wire !== correctOrder[idx] ? idx + 1 : null
-                ).filter(pin => pin !== null);
-                
-                resultContainer.innerHTML = `
-                    <div class="bg-red-100 border-2 border-red-500 rounded-xl p-4 text-center">
-                        <i data-lucide="x-circle" class="text-red-600 mx-auto mb-2" style="width: 32px; height: 32px;"></i>
-                        <div class="text-red-800 font-bold mb-2">Belum Benar!</div>
-                        <div class="text-red-700 text-sm">Periksa kembali PIN: ${wrongPins.join(', ')}</div>
-                        <div class="text-red-600 text-xs mt-2">Lihat referensi cepat di panel kanan</div>
-                    </div>
-                `;
             }
-            
-            resultContainer.style.display = 'block';
-            lucide.createIcons();
+
+        } else {
+            const wrongPins = state.placedWires
+                .map((wire, idx) => wire !== correctOrder[idx] ? idx + 1 : null)
+                .filter(pin => pin !== null);
+
+            showResult('error', 
+                'Belum Benar!', 
+                `Periksa kembali PIN: ${wrongPins.join(', ')}`
+            );
         }
+    });
+}
+
+function showResult(type, title, message) {
+    const resultContainer = document.getElementById('validation-result');
+
+    const styles = {
+    success: 'bg-gradient-to-r from-green-500 to-emerald-500 text-white shadow-lg',
+    error: 'bg-red-100 border-2 border-red-500 text-red-800',
+    warning: 'bg-yellow-100 border-2 border-yellow-500 text-yellow-800'
+};
+
+    resultContainer.innerHTML = `
+        <div class="${styles[type]} rounded-xl p-5 text-center animate-slideIn">
+            <h3 class="text-xl font-bold mb-2">${title}</h3>
+            <p class="text-sm">${message}</p>
+        </div>
+    `;
+
+    resultContainer.style.display = 'block';
+}
 
         function resetPractice() {
             state.placedWires = [null, null, null, null, null, null, null, null];
@@ -934,7 +825,6 @@
             resultContainer.style.display = 'none';
         }
 
-        renderLearningPath();
         renderObjectives();
         updateProgress();
     </script>
