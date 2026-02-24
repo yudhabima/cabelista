@@ -126,28 +126,6 @@
                 </div>
                 
                 <div class="flex items-center gap-6">
-                    <div class="bg-gradient-to-r from-yellow-400 to-orange-500 rounded-xl p-3 shadow-md">
-                        <div class="flex items-center gap-2">
-                            <i data-lucide="zap" class="text-white" style="width: 20px; height: 20px;"></i>
-                            <div class="text-white">
-                                <div class="text-xs font-medium">XP Points</div>
-                                <div class="text-xl font-bold" id="xp-value">0</div>
-                            </div>
-                        </div>
-                        <div class="w-32 bg-white/30 rounded-full h-1.5 mt-1">
-                            <div class="bg-white h-full rounded-full transition-all" id="xp-bar" style="width: 0%"></div>
-                        </div>
-                    </div>
-                    
-                    <div class="bg-gradient-to-r from-blue-500 to-purple-500 rounded-xl p-3 shadow-md">
-                        <div class="flex items-center gap-2">
-                            <i data-lucide="star" class="text-yellow-300" style="width: 20px; height: 20px;"></i>
-                            <div class="text-white">
-                                <div class="text-xs font-medium">Skor Total</div>
-                                <div class="text-xl font-bold" id="score-value">0</div>
-                            </div>
-                        </div>
-                    </div>
                     <div class="flex items-center gap-3 bg-gray-100">
                     </div>
                 </div>
@@ -745,8 +723,6 @@
 
         // Application State
         const state = {
-            score: 0,
-            xp: 0,
             currentSection: 1,
             quizAnswers: [false, false, false, false, false],
             completedSections: [false, false, false, false, false],
@@ -846,19 +822,6 @@
             }
         }
 
-        // Update Score and XP
-        function updateScore(points, xp) {
-            state.score += points;
-            state.xp += xp;
-            
-            document.getElementById('score-value').textContent = state.score;
-            document.getElementById('xp-value').textContent = state.xp;
-            
-            const xpPercentage = (state.xp % 100) / 10;
-            document.getElementById('xp-bar').style.width = xpPercentage + '%';
-            
-        }
-
         // Next Section
         function nextSection(sectionNum) {
             // Hide current section
@@ -868,7 +831,6 @@
             if (state.currentSection <= 5) {
                 state.objectives[state.currentSection - 1].completed = true;
                 state.completedSections[state.currentSection - 1] = true;
-                updateScore(100, 60);
             }
             
             // Show next section
@@ -935,7 +897,6 @@
                 
                 if (isCorrect) {
                     correctAnswers++;
-                    updateScore(100, 60);
                 }
                 
                 // Check if all questions answered

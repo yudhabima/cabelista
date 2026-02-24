@@ -35,14 +35,24 @@
     {{-- ========================= --}}
     {{-- HEADER --}}
     {{-- ========================= --}}
+    <div class="bg-white rounded-2xl shadow-xl p-4 mb-4 border-b-4 border-blue-500">
+        <div class="flex justify-between">
     <div class="text-center space-y-2 mt-4 mb-10">
         <h1 class="text-3xl md:text-4xl font-extrabold text-cabelista-blue pb-2">
-            Dashboard Analisis Hasil Simulasi
+            Analisis Hasil Simulasi
         </h1>
-        <p class="text-slate-500 font-medium flex items-center justify-center gap-2">
+        <p class="text-slate-500 font-medium flex items-center gap-2">
             Praktikum Crimping Kabel UTP (T568A & T568B)
         </p>
     </div>
+    <div class="flex items-center gap-6">
+    <a href="{{ route('admin.dashboard') }}" 
+       class="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white px-5 py-3 rounded-xl shadow-md flex items-center gap-2 transition-all">
+        <span class="font-semibold">Dashboard Admin</span>
+    </a>
+    </div>
+</div>
+</div>
 
     {{-- ========================= --}}
     {{-- STATISTIK UTAMA --}}

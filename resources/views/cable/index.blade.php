@@ -513,7 +513,7 @@
     <!-- CTA Section -->
     <section class="cta-section"  id="simulasi">
         <h2>Belajar Makin Mudah, Seru, Dan<br>Sesuai Gayamu!</h2>
-        <a href="{{ url('/analisis') }}" class="btn-primary">
+        <a href="{{ url('/simulasi') }}" class="btn-primary">
     Mainkan!
 </a>
     </section>

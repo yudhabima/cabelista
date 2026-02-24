@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cabelista - Connected Lab</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         /* CSS SAMA SEPERTI SEBELUMNYA */
         :root { --primary: #0f172a; --secondary: #334155; --accent: #f59e0b; --bg: #f1f5f9; --danger: #ef4444; --success: #22c55e; --white: #ffffff; }
@@ -172,6 +173,77 @@
         /* Loading Spinner */
         .spinner { border: 4px solid #f3f3f3; border-top: 4px solid var(--accent); border-radius: 50%; width: 20px; height: 20px; animation: spin 2s linear infinite; display: inline-block; margin-right:10px; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        /* ================= INTRO OVERLAY ================= */
+.intro-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.7);
+    backdrop-filter: blur(6px);
+    z-index: 999;
+}
+
+.intro-highlight {
+    position: absolute;
+}
+
+.intro-box {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #ffffff;
+    width: 400px;
+    max-width: 90%;
+    padding: 20px;
+    border-radius: 12px;
+    text-align: center;
+    z-index: 1000;
+}
+
+.intro-box h2 {
+    margin-bottom: 10px;
+    color: #0f172a;
+}
+
+.intro-box p {
+    font-size: 0.9em;
+    margin-bottom: 15px;
+}
+
+.intro-buttons {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.intro-buttons button {
+    padding: 8px 16px;
+    border: none;
+    background: #004AAD;
+    color: white;
+    border-radius: 6px;
+    cursor: pointer;
+}
+.introIcon {
+    width: 150px;        /* atur lebar di sini */
+    height: 150px;       /* atur tinggi di sini */
+    margin: 0 auto 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.introIcon img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+.intro-icon img {
+            width: 40px;
+            height: 40px;
+            object-fit: contain;
+        }
+
     </style>
 </head>
 <body>
@@ -206,19 +278,19 @@
                 <div class="tool-icon">🧤</div><div class="tool-name">Safety Gloves</div>
                 <div id="gloveStatus" style="position:absolute; top:5px; right:5px; width:10px; height:10px; border-radius:50%; background:red;"></div>
             </div>
-            <div class="tool-box" draggable="true" ondragstart="dragTool(event, 'cutter')">
-                <div class="tool-icon">
-                    <img src="{{ asset('assets/img/cable-cutter.png') }}" 
-                         alt="Cable Cutter" 
-                         class="w-10 h-10 object-contain">
-                </div><div class="tool-name">Cable Cutter</div>
-            </div>
             <div class="tool-box" draggable="true" ondragstart="dragTool(event, 'stripper')">
                 <div class="tool-icon">
                     <img src="{{ asset('assets/img/Cable-Stripper.png') }}" 
                          alt="Cable Stripper" 
                          class="w-10 h-10 object-contain">
                 </div><div class="tool-name">Cable Stripper</div>
+            </div>
+            <div class="tool-box" draggable="true" ondragstart="dragTool(event, 'cutter')">
+                <div class="tool-icon">
+                    <img src="{{ asset('assets/img/cable-cutter.png') }}"
+                         alt="Cable Cutter" 
+                         class="w-10 h-10 object-contain">
+                </div><div class="tool-name">Cable Cutter</div>
             </div>
         </div>
 
@@ -303,10 +375,28 @@
                 <div class="info-box">Status Upload: <strong id="resUploadStatus">-</strong></div>
             </div>
 
+            <button class="btn-start" style="background:#0f172a; margin-top:10px;" onclick="downloadResultImage()">Download Hasil 📥</button>
             <button class="btn-start" style="background:var(--success); margin-top:10px;" onclick="shareWA()">Share ke WhatsApp 📲</button>
             <button class="reset-btn" style="width:100%; margin-top:10px; background:#004AAD;" onclick="hardReset()">Play Again</button>
         </div>
     </div>
+
+    <!-- GAME INTRO TUTORIAL -->
+<div id="gameIntro" class="intro-overlay hidden">
+    <div class="intro-highlight" id="introHighlight"></div>
+
+    <div class="intro-box">
+        <h2 id="introTitle">Tutorial</h2>
+        <div id="introIcon"></div>
+        <p id="introText">Penjelasan</p>
+
+        <div class="intro-buttons">
+            <button onclick="prevIntro()">Back</button>
+            <button onclick="nextIntro()">Next</button>
+            <button onclick="closeIntro()" id="introStartBtn" style="display:none;">Start Practicum</button>
+        </div>
+    </div>
+</div>
 
     <!-- Footer -->
     <div class="footer-bottom">
@@ -349,10 +439,19 @@
         // INIT & RESTORE SESSION
         // ============================================
         window.onload = () => {
-            generateSlots();
-            generateLEDs();
-            restoreSession(); // Cek apakah ada data tersimpan
-        };
+    generateSlots();
+    generateLEDs();
+    restoreSession();
+
+    // CEK apakah tutorial sudah pernah dilihat
+    const introSeen = localStorage.getItem("cabelista_intro_seen");
+
+    if (!introSeen) {
+        setTimeout(() => {
+            startIntro();
+        }, 500);
+    }
+};
 
         function restoreSession() {
             // Ambil data dari Cookies/LocalStorage
@@ -791,6 +890,171 @@ fetch("{{ route('simulation.save') }}", {
             const txt = `*HASIL PRAKTIKUM CABELISTA*%0ANama: ${s.name}%0AAbsen: ${s.absen}%0ASkor: ${document.getElementById('finalScore').innerText}%0AStatus: ${s.finalResult}%0ATime: ${document.getElementById('timer').innerText}%0ACable: ${s.cableUsed}%0ARJ45: ${s.rjCount}`;
             window.open(`https://wa.me/?text=${txt}`, '_blank');
         }
+    
+    // ================= INTRO SYSTEM =================
+
+const introSteps = [
+    {
+        element: ".tool-box",
+        title: "Step 1 - Isi Data Diri",
+        text: "Masukkan Nama dan Nomor Absen sebelum memulai praktikum.",
+        icon: "<img src='/assets/icons/welcome.png'width='350'>"
+    },
+    {
+        element: ".tool-box",
+        title: "Step 2 - Safety First",
+        text: "Klik Safety Gloves terlebih dahulu sebelum menggunakan alat apapun.",
+        icon: "<img src='/assets/icons/safety-gloves.png'width='150'>"
+    },
+    {
+        element: ".tool-box",
+        title: "Step 3 - Kupas Kabel",
+        text: "Gunakan Cable Stripper untuk mengupas jaket kabel.",
+        icon: "<img src='/assets/icons/stripper.png' width='150'>"
+    },
+    {
+        element: ".tool-box",
+        title: "Step 4 - Urutkan Kabel",
+        text: "Susun kabel sesuai standar T568A atau T568B.",
+        icon: "<img src='/assets/icons/cabel-utp.png' width='350'>"
+    },
+    {
+        element: ".tool-box",
+        title: "Step 5 - Pasang RJ45",
+        text: "Pasang konektor RJ45 setelah kabel tersusun rapi.",
+        icon: "<img src='/assets/icons/rj45-conn.png' width='150'>"
+    },
+    {
+        element: ".tool-box",
+        title: "Step 6 - Crimping",
+        text: "Gunakan tang crimp untuk mengunci kabel pada RJ45.",
+        icon: "<img src='/assets/icons/crimping-tool.png' width='150'>"
+    },
+    {
+        element: ".tool-box",
+        title: "Step 7 - Testing",
+        text: "Buka tester, tekan RUN TEST lalu Submit & Score.",
+        icon: "<img src='/assets/icons/tester.png' width='150'>"
+    },
+    {
+        element: ".tool-box",
+        title: "Step 8 - Cable Cutter",
+        text: "Gunakan Cable Cutter untuk memotong kabel jika ingin mengulang.",
+        icon: "<img src='/assets/icons/cutter.png' width='150'>"
+    },
+    {
+    element: ".tool-box",
+    title: "Sistem Penilaian Praktikum",
+    text: `
+        --------------Nilai Awal: 100 poin--------------
+
+        ❌ Jika hasil tester FAIL, maka nilai otomatis 0.
+
+        ✅ Jika Urutan Kabel Benar (T568A / T568B)
+        Nilai akan dikurangi berdasarkan efisiensi kerja:
+
+        ----------------Pemakaian Kabel-----------------
+        - Setiap 5 cm kabel terpakai → dikurangi 10 poin
+
+        ----------------Pemakaian RJ45------------------
+        - 1 konektor → tidak ada pengurangan 
+        - Jika memakai lebih dari 1 konektor, Setiap tambahan RJ45 → dikurangi 5 poin
+        
+        ----------------Waktu Pengerjaan----------------
+        - Batas waktu ideal: 150 detik (2 menit 30 detik)
+        - Setiap kelebihan 10 detik → dikurangi 1 poin
+        
+        `,
+    icon: "🏆"
+}
+];
+
+let currentIntro = 0;
+
+function startIntro() {
+    document.getElementById("gameIntro").classList.remove("hidden");
+    showIntroStep();
+}
+
+function showIntroStep() {
+    const step = introSteps[currentIntro];
+    const el = document.querySelector(step.element);
+    const highlight = document.getElementById("introHighlight");
+
+    if (!el) return;
+
+    const rect = el.getBoundingClientRect();
+
+    highlight.style.top = rect.top - 5 + "px";
+    highlight.style.left = rect.left - 5 + "px";
+    highlight.style.width = rect.width + 10 + "px";
+    highlight.style.height = rect.height + 10 + "px";
+
+    document.getElementById("introTitle").innerText = step.title;
+    document.getElementById("introText").innerText = step.text;
+    document.getElementById("introIcon").innerHTML = step.icon;
+
+    const backBtn = document.querySelector(".intro-buttons button:nth-child(1)");
+    const nextBtn = document.querySelector(".intro-buttons button:nth-child(2)");
+    const startBtn = document.getElementById("introStartBtn");
+    const buttonsContainer = document.querySelector(".intro-buttons");
+
+    // 🔹 STEP 1 → HIDE BACK
+    if (currentIntro === 0) {
+    backBtn.style.display = "none";
+    buttonsContainer.style.justifyContent = "flex-end"; // 👉 Next ke kanan
+} else {
+    backBtn.style.display = "inline-block";
+    buttonsContainer.style.justifyContent = "space-between";
+}
+
+    // 🔹 STEP TERAKHIR → HIDE NEXT & SHOW START
+    if (currentIntro === introSteps.length - 1) {
+        nextBtn.style.display = "none";
+        startBtn.style.display = "inline-block";
+    } else {
+        nextBtn.style.display = "inline-block";
+        startBtn.style.display = "none";
+    }
+}
+
+function nextIntro() {
+    if(currentIntro < introSteps.length - 1){
+        currentIntro++;
+        showIntroStep();
+    }
+}
+
+function prevIntro() {
+    if(currentIntro > 0){
+        currentIntro--;
+        showIntroStep();
+    }
+}
+
+function closeIntro() {
+    document.getElementById("gameIntro").classList.add("hidden");
+
+    // Tandai bahwa tutorial sudah pernah dilihat
+    localStorage.setItem("cabelista_intro_seen", "true");
+}
+
+function downloadResultImage() {
+
+    const scoreCard = document.querySelector("#scoreModal .modal-box");
+
+    html2canvas(scoreCard, {
+        scale: 2
+    }).then(canvas => {
+
+        const link = document.createElement("a");
+        link.download = `Hasil_Cabelista_${s.name}.png`;
+        link.href = canvas.toDataURL("image/png");
+        link.click();
+
+    });
+
+}
     </script>
 
     <form id="resultForm" action="{{ route('simulation.save') }}" method="POST">

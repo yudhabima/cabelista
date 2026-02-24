@@ -144,31 +144,8 @@
                  <img src="/assets/img/logo-cabelista.png" alt="Logo Cabelista">
                     </div>
                 </div>
-                
-                <div class="flex items-center gap-6">
-                    <div class="bg-gradient-to-r from-yellow-400 to-orange-500 rounded-xl p-3 shadow-md">
-                        <div class="flex items-center gap-2">
-                            <i data-lucide="zap" class="text-white" style="width: 20px; height: 20px;"></i>
-                            <div class="text-white">
-                                <div class="text-xs font-medium">XP Points</div>
-                                <div class="text-xl font-bold" id="xp-value">0</div>
-                            </div>
-                        </div>
-                        <div class="w-32 bg-white/30 rounded-full h-1.5 mt-1">
-                            <div class="bg-white h-full rounded-full transition-all" id="xp-bar" style="width: 50%"></div>
-                        </div>
-                    </div>
-                    
-                    <div class="bg-gradient-to-r from-blue-500 to-purple-500 rounded-xl p-3 shadow-md">
-                        <div class="flex items-center gap-2">
-                            <i data-lucide="star" class="text-yellow-300" style="width: 20px; height: 20px;"></i>
-                            <div class="text-white">
-                                <div class="text-xs font-medium">Skor Total</div>
-                                <div class="text-xl font-bold" id="score-value">0</div>
-                            </div>
-                        </div>
-                    </div>
-                    
+            
+                <div class="flex items-center gap-6"> 
                     <div class="flex items-center gap-3 bg-gray-100">
                     </div>
                     </div>
@@ -521,8 +498,6 @@
         lucide.createIcons();
 
         const state = {
-            score: 800,
-            xp: 500,
             currentSection: 1,
             selectedStandard: 'T568A',
             quizAnswers: [false, false, false, false, false],
@@ -593,30 +568,12 @@ if (mission && state.objectives.every(o => o.completed)) {
 }
         }
 
-        function updateScore(points, xp) {
-    state.score += points;
-    state.xp += xp;
-    
-    document.getElementById('score-value').textContent = state.score;
-    document.getElementById('xp-value').textContent = state.xp;
-    
-    const xpPercentage = (state.xp % 1000) / 10;
-    document.getElementById('xp-bar').style.width = xpPercentage + '%';
-    
-    const badge = document.getElementById('badge-2');
-    if (badge && state.score >= 1000) {
-        badge.classList.remove('opacity-50', 'scale-90');
-        badge.classList.add('bg-gradient-to-br', 'from-orange-400', 'to-pink-500', 'scale-100');
-    }
-}
-
         function nextSection(sectionNum) {
     const current = document.getElementById(`section-${state.currentSection}`);
     if (current) current.classList.remove('active');
 
     if (state.currentSection <= 4 && state.objectives[state.currentSection - 1]) {
         state.objectives[state.currentSection - 1].completed = true;
-        updateScore(100, 50);
     }
 
     state.currentSection = sectionNum;
@@ -779,7 +736,6 @@ if (mission && state.objectives.every(o => o.completed)) {
 
             if (!state.objectives[3].completed) {
                 state.objectives[3].completed = true;
-                updateScore(100, 50);
                 updateProgress();
             }
 

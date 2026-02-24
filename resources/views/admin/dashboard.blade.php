@@ -46,7 +46,7 @@
                     <p class="text-sm text-blue-100 mb-8 flex-1">
                         Memantau nilai dan hasil evaluasi simulasi crimping kabel UTP
                     </p>
-                    <a href="{{ url('/analisisnilai') }}" class="btn-gradient w-32 py-2 rounded-full font-semibold shadow-lg border-2 border-white/30 hover:shadow-xl hover:brightness-110 transition inline-block text-center">
+                    <a href="{{ url('/analisis') }}" class="btn-gradient w-32 py-2 rounded-full font-semibold shadow-lg border-2 border-white/30 hover:shadow-xl hover:brightness-110 transition inline-block text-center">
                     Detail
                     </a>
                 </div>

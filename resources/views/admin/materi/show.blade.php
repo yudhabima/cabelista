@@ -39,28 +39,18 @@
                  <img src="/assets/img/logo-cabelista.png" alt="Logo Cabelista">
                     </div>
             </div>
-
-            <div class="flex items-center gap-6">
-    
-    <a href="{{ route('admin.dashboard') }}" 
-       class="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 
-              text-white px-5 py-3 rounded-xl shadow-md flex items-center gap-2 transition-all">
-        
-        <i data-lucide="layout-dashboard" style="width: 20px; height: 20px;"></i>
-        <span class="font-semibold">Dashboard Admin</span>
-    </a>
-
-</div>
             </div>
         </div>
     </div>
 
-    <div class="flex gap-4">
+    <div class="max-w-20xl mx-auto px-6 py-8">
+    <div class="flex flex-col lg:flex-row gap-8">
 
         <!-- MAIN CONTENT -->
         <div class="flex-1">
+            <div class="px-2"></div>
 
-            <div class="bg-white rounded-2xl shadow-xl p-6 border-t-4 border-purple-500">
+            <div class="bg-white rounded-2xl shadow-xl p-8 lg:p-10 border-t-4 border-purple-500">
 
                 <div class="text-center mb-6">
                     <h2 class="text-3xl font-bold text-blue-700">
@@ -88,91 +78,83 @@
                     </div>
 
                     <button onclick="nextSection({{ $loop->last ? $material->steps->count()+1 : $index+2 }})"
-    class="mt-4 w-full py-4 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-xl font-bold text-lg hover:shadow-xl transition-all hover:scale-105 flex items-center justify-center gap-2">
-
-    {{ $loop->last ? 'Mulai Quiz' : 'Lanjutkan' }}
-
-</button>
-
+                        class="mt-4 w-full py-4 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-xl font-bold text-lg hover:shadow-xl transition-all hover:scale-105 flex items-center justify-center gap-2">
+                        {{ $loop->last ? 'Mulai Quiz' : 'Lanjutkan' }}
+                    </button>
                 </div>
 
                 @endforeach
 
                 {{-- QUIZ --}}
                 <div id="section-quiz" class="content-section">
+                    <div class="text-center mb-6">
+                        <div class="inline-block bg-yellow-100 px-4 py-2 rounded-full mb-3">
+                        <span class="text-yellow-700 font-semibold text-sm">
+                            🎯 Kuis Pemahaman
+                        </span>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-800 mb-2">
+                        Uji Pemahaman Anda
+                        </h3>
+                        <p class="text-gray-600">
+                        Jawab pertanyaan berikut untuk menyelesaikan materi ini
+                        </p>
+                    </div>
+                        @foreach($material->quizzes as $quiz)
+                    <div class="bg-white rounded-xl p-6 shadow-md border-2 border-gray-200 quiz-item" data-question="{{ $loop->index + 1 }}">
+                        <div class="flex items-start gap-3 mb-4">
+                        <div class="bg-blue-500 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold flex-shrink-0">{{ $loop->index + 1 }}</div>
+                        <p class="text-gray-800 font-semibold">
+                        {{ $quiz->question }}</p>
+                        </div>
+                        <div class="space-y-2 ml-11">
+                            <button onclick="checkAnswer(this,'{{ $quiz->answer }}','A')"
+                                class="option-btn w-full text-left p-3 rounded-lg border-2 border-gray-300 cursor-pointer hover:border-blue-500 hover:bg-blue-50">
+                                <span class="text-gray-700">A. {{ $quiz->A }}</span>
+                            </button>
 
-    <div class="text-center mb-6">
-        <div class="inline-block bg-yellow-100 px-4 py-2 rounded-full mb-3">
-            <span class="text-yellow-700 font-semibold text-sm">
-                🎯 Kuis Pemahaman
-            </span>
-        </div>
-        <h3 class="text-2xl font-bold text-gray-800 mb-2">
-            Uji Pemahaman Anda
-        </h3>
-        <p class="text-gray-600">
-            Jawab pertanyaan berikut untuk menyelesaikan materi ini
-        </p>
-        </div>
-    @foreach($material->quizzes as $quiz)
-<div class="bg-white border rounded-xl p-5 mb-4 quiz-item">
-    <p class="font-semibold mb-3">
-        {{ $quiz->question }}
-    </p>
+                            <button onclick="checkAnswer(this,'{{ $quiz->answer }}','B')"
+                                class="option-btn w-full text-left p-3 rounded-lg border-2 border-gray-300 cursor-pointer hover:border-blue-500 hover:bg-blue-50">
+                                <span class="text-gray-700">B. {{ $quiz->B }}</span>
+                            </button>
 
-    <div class="space-y-2">
-        <button onclick="checkAnswer(this,'{{ $quiz->answer }}','A')"
-            class="option-btn w-full text-left p-2 border rounded hover:bg-gray-100">
-            A. {{ $quiz->A }}
-        </button>
+                            <button onclick="checkAnswer(this,'{{ $quiz->answer }}','C')"
+                                class="option-btn w-full text-left p-3 rounded-lg border-2 border-gray-300 cursor-pointer hover:border-blue-500 hover:bg-blue-50">
+                                <span class="text-gray-700">C. {{ $quiz->C }}</span>
+                            </button>
 
-        <button onclick="checkAnswer(this,'{{ $quiz->answer }}','B')"
-            class="option-btn w-full text-left p-2 border rounded hover:bg-gray-100">
-            B. {{ $quiz->B }}
-        </button>
+                            <button onclick="checkAnswer(this,'{{ $quiz->answer }}','D')"
+                                class="option-btn w-full text-left p-3 rounded-lg border-2 border-gray-300 cursor-pointer hover:border-blue-500 hover:bg-blue-50">
+                                <span class="text-gray-700">D. {{ $quiz->D }}</span>
+                            </button>
+                        </div>
+                    </div>
+                    @endforeach
 
-        <button onclick="checkAnswer(this,'{{ $quiz->answer }}','C')"
-            class="option-btn w-full text-left p-2 border rounded hover:bg-gray-100">
-            C. {{ $quiz->C }}
-        </button>
-
-        <button onclick="checkAnswer(this,'{{ $quiz->answer }}','D')"
-            class="option-btn w-full text-left p-2 border rounded hover:bg-gray-100">
-            D. {{ $quiz->D }}
-        </button>
-    </div>
-</div>
-@endforeach
-
-<!-- RESULT (DI LUAR FOREACH) -->
-<div id="quiz-result" class="mt-6 hidden">
-    <div class="bg-gradient-to-r from-green-500 to-emerald-500 rounded-xl p-6 text-center text-white">
-        <i data-lucide="trophy" class="mx-auto mb-3" style="width: 48px; height: 48px;"></i>
-        <h3 class="text-2xl font-bold mb-2">Selamat!</h3>
-        <p class="text-lg mb-4">
-            Skor Anda: <span id="final-score" class="font-bold">0</span>
-        </p>
-        <p class="mb-4">
-            Anda telah menyelesaikan semuanya dan siap melanjutkan ke perjalanan selanjutnya!
-        </p>
-        <a href="{{ url('/') }}"
-           class="px-6 py-2 rounded-lg font-medium bg-blue-500 hover:bg-blue-600 transition shadow-lg border border-blue-400 inline-block">
-            Finish
-        </a>
-    </div>
-</div>
-
-
-            </div>
-
-
+        <!-- RESULT (DI LUAR FOREACH) -->
+        <div id="quiz-result" class="mt-6 hidden">
+            <div class="bg-gradient-to-r from-green-500 to-emerald-500 rounded-xl p-6 text-center text-white">
+                <i data-lucide="trophy" class="mx-auto mb-3" style="width: 48px; height: 48px;"></i>
+                <h3 class="text-2xl font-bold mb-2">Selamat!</h3>
+                <p class="text-lg mb-4">
+                    Skor Anda: <span id="final-score" class="font-bold">0</span>/{{ $material->quizzes->count() }}</p>
+                <p class="mb-4">
+                    Anda telah menyelesaikan semuanya dan siap melanjutkan ke perjalanan selanjutnya!
+                </p>
+                <a href="{{ url('/') }}"
+                class="px-6 py-2 rounded-lg font-medium bg-blue-500 hover:bg-blue-600 transition shadow-lg border border-blue-400 inline-block">
+                    Finish
+                </a>
             </div>
         </div>
+        </div>
+    </div>
+    </div>
 
         <!-- SIDEBAR PROGRESS -->
-<div class="w-full sm:w-72 md:w-80">
+    <div class="w-full lg:w-80">
 
-    <div class="bg-white rounded-2xl shadow-xl p-5 border-t-4 border-green-500"">
+    <div class="bg-white rounded-2xl shadow-xl p-5 border-t-4 border-green-500">
 
         <h3 class="font-bold mb-3 text-lg">Progres Level</h3>
 
@@ -208,15 +190,11 @@
 
             </div>
             @endforeach
-
         </div>
-
     </div>
-
 </div>
-
-
-    </div>
+</div>
+</div>
 </div>
 
 <script>
@@ -226,18 +204,8 @@ let current = 1;
 const totalSteps = {{ $material->steps->count() }};
 const totalQuiz = {{ $material->quizzes->count() }};
 
-// 🎯 Ambil nilai awal dari database
-let xp = {{ $material->xp_reward }};
-let totalScore = {{ $material->total_score }};
-
-let score = 0;
 let answered = 0;
-
-// 🎮 Konfigurasi poin
-const stepXP = 5;
-const stepScore = 5;
-const quizXP = 10;
-const quizScore = 10;
+let score = 0; // hanya untuk skor quiz akhir (opsional tampil di result)
 
 // ================================
 // STEP NAVIGATION
@@ -261,12 +229,6 @@ function nextSection(next){
 
         document.getElementById('section-'+next)
             .classList.add('active');
-
-        // ✅ Tambah XP & Skor saat step selesai
-        xp += stepXP;
-        totalScore += stepScore;
-
-        updateXPAndScore();
     }
 
     let percent = (current / (totalSteps + 1)) * 100;
@@ -314,13 +276,7 @@ function checkAnswer(button, correct, selected){
     if(selected === correct){
 
         button.classList.add('bg-green-500','text-white');
-
-        // ✅ Tambah XP & Skor jika benar
-        score += quizScore;
-        totalScore += quizScore;
-        xp += quizXP;
-
-        updateXPAndScore();
+        score += 1;
 
     } else {
 
@@ -332,8 +288,6 @@ function checkAnswer(button, correct, selected){
             }
         });
     }
-
-    document.getElementById('scoreDisplay').innerText = score;
 
     // Progress quiz bertahap
     let quizProgress = ((current) / (totalSteps + 1)) * 100;
@@ -349,30 +303,10 @@ function checkAnswer(button, correct, selected){
     }
 }
 
-// ================================
-// XP & SCORE UPDATE
-// ================================
-
-function updateXPAndScore(){
-
-    //document.getElementById('xpValue').innerText = xp;
-    //document.getElementById('totalScoreValue').innerText = totalScore;
-
-    //animateXPBar();
-}
-
-function animateXPBar(){
-
-    //let maxXP = 100;
-    //let percent = (xp % maxXP) / maxXP * 100;
-
-    //document.getElementById('xp-bar').style.width = percent + "%";
-}
-
 // INIT
 updateProgressIndicator();
 updateProgressBar( (1 / (totalSteps + 1)) * 100 );
-//animateXPBar();
+
 </script>
 </body>
 </html>
